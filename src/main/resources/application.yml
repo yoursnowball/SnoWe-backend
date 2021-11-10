@@ -10,3 +10,7 @@ spring:
       properties:
         hibernate:
           dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+app:
+  jwt:
+    secret = ${APP_JWT_SECRET}

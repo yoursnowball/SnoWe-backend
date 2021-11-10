@@ -1,4 +1,4 @@
-package com.snowman.project.config
+package com.snowman.project.config.exceptions
 
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
