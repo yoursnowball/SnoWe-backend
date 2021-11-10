@@ -1,0 +1,3 @@
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET}

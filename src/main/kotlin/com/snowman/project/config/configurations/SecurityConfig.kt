@@ -26,6 +26,7 @@ class SecurityConfig(
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
+            .anyRequest().authenticated()
             .and()
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtTokenProvider, objectMapper),

@@ -13,4 +13,4 @@ spring:
 
 app:
   jwt:
-    secret = ${APP_JWT_SECRET}
+    secret: ${APP_JWT_SECRET}
