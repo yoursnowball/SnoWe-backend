@@ -1,4 +1,4 @@
-package com.snowman.project.service
+package com.snowman.project.service.todo
 
 import com.snowman.project.dao.todo.TodoRepository
 import org.springframework.stereotype.Service

@@ -20,6 +20,9 @@ data class User(
 
     @Column(name = "alarm_time")
     var alarmTime: LocalTime? = null,
+
+    @Column(name = "fcm_token")
+    var fcmToken: String? = null
 ) : BaseTimeEntity() {
 
 }

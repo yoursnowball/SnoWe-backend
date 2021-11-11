@@ -2,8 +2,9 @@ package com.snowman.project.config.exceptions
 
 import java.time.LocalDateTime
 
-enum class ErrorCode(
+class ErrorResponse(
     val code: String,
-    val message: String,
+    val message: String
 ) {
+    val timeStamp: LocalDateTime = LocalDateTime.now()
 }

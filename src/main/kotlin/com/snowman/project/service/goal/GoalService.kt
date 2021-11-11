@@ -1,4 +1,4 @@
-package com.snowman.project.service
+package com.snowman.project.service.goal
 
 import com.snowman.project.dao.goal.GoalRepository
 import org.springframework.stereotype.Service

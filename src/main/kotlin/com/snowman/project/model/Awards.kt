@@ -12,7 +12,11 @@ data class Awards(
     @MapsId
     @OneToOne
     @JoinColumn(name = "id")
-    val goal: Goal
+    val goal: Goal,
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    val user: User
 
 
 ) : BaseTimeEntity() {
