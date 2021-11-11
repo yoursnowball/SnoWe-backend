@@ -1,4 +1,4 @@
-package com.snowman.project.controller
+package com.snowman.project.controller.goal
 
 import org.springframework.web.bind.annotation.*
 

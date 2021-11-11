@@ -1,4 +1,4 @@
-package com.snowman.project.controller
+package com.snowman.project.controller.auth
 
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping

@@ -1,6 +1,6 @@
 package com.snowman.project.service
 
-import com.snowman.project.dao.GoalRepository
+import com.snowman.project.dao.goal.GoalRepository
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 

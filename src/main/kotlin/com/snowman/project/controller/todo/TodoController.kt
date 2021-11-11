@@ -1,4 +1,4 @@
-package com.snowman.project.controller
+package com.snowman.project.controller.todo
 
 import org.springframework.web.bind.annotation.*
 

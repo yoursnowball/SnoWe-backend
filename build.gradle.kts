@@ -1,5 +1,7 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("org.springframework.boot") version "2.4.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -7,6 +9,7 @@ plugins {
     kotlin("jvm") version "1.5.31"
     kotlin("plugin.spring") version "1.5.31"
     kotlin("plugin.jpa") version "1.5.31"
+    kotlin("kapt") version "1.5.31"
 }
 
 group = "com.snowman"
@@ -30,6 +33,7 @@ dependencies {
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("mysql:mysql-connector-java")
+    kapt("com.querydsl:querydsl-apt:4.2.2:jpa")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
