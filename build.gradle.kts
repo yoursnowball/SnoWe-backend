@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("org.springframework.boot") version "2.4.2"
@@ -32,6 +31,8 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.10.5")
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.10.7")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.10.7")
     runtimeOnly("mysql:mysql-connector-java")
     kapt("com.querydsl:querydsl-apt:4.2.2:jpa")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

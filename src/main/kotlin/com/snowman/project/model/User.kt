@@ -1,16 +1,17 @@
 package com.snowman.project.model
 
 import java.time.LocalTime
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "users")
 data class User(
     @Id
+    @GeneratedValue
     val id: Long? = null,
+
+    @Column(name = "user_name", nullable = false)
+    val userName: String,
 
     @Column(name = "password", nullable = false)
     val password: String,

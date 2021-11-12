@@ -16,7 +16,7 @@ import java.util.stream.Collectors
 import javax.servlet.http.HttpServletRequest
 
 @Component
-open class JwtTokenProvider(
+class JwtTokenProvider(
     @Value("\${app.jwt.secret}") private val jwtSecret: String,
 ) {
     companion object {
@@ -26,12 +26,12 @@ open class JwtTokenProvider(
 
     val key = Keys.hmacShaKeyFor(jwtSecret.toByteArray())
 
-    fun generateToken(userId: String): String {
+    fun generateToken(userName: String): String {
         val now = Date()
         val expiredIn = now.time + TOKEN_VALID_TIME
 
         return Jwts.builder()
-            .claim("id", userId)
+            .claim("id", userName)
             .setIssuedAt(now)
             .setExpiration(Date(expiredIn))
             .signWith(key, SignatureAlgorithm.HS256)
@@ -48,15 +48,16 @@ open class JwtTokenProvider(
     fun resolveToken(req: HttpServletRequest): Claims? {
         val headerValue: String? = req.getHeader("Authorization")
         val token = if (headerValue.isNullOrBlank()) {
-            return null
+            null
         } else if (headerValue.contains(BEARER)) {
             headerValue.replace(BEARER, "")
         } else {
             throw DecodingException("Bearer 가 존재하지 않습니다.")
         }
 
-        return getClaimsFromToken(token)
+        return token?.let { getClaimsFromToken(it) }
     }
+
     private fun getAuthorities(claims: Claims): Collection<GrantedAuthority?>? {
         return claims.get("roles", List::class.java).stream()
             .map { SimpleGrantedAuthority(it as String) }
