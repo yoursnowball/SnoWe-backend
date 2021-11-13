@@ -1,14 +1,13 @@
-package com.snowman.project.model
+package com.snowman.project.model.goal
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import com.snowman.project.model.common.BaseTimeEntity
+import javax.persistence.*
 
 @Entity
 @Table(name = "goals")
 data class Goal(
     @Id
+    @GeneratedValue
     val id: Long? = null,
 
     @Column(name = "name", length = 20, nullable = false)

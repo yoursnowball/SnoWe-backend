@@ -1,6 +1,6 @@
 package com.snowman.project.dao.todo
 
-import com.snowman.project.model.Todo
+import com.snowman.project.model.todo.Todo
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

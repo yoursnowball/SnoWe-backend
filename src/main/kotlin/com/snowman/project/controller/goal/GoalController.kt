@@ -1,5 +1,7 @@
 package com.snowman.project.controller.goal
 
+import com.snowman.project.config.security.AuthInfo
+import com.snowman.project.config.security.Authenticated
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -10,8 +12,7 @@ class GoalController {
      * 부캐리스트 가져오기
      */
     @GetMapping
-    fun getGoals() {
-
+    fun getGoals(@Authenticated authInfo: AuthInfo) {
     }
 
     /**

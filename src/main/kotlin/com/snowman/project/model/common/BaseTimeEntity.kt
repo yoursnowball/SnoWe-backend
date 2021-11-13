@@ -1,4 +1,4 @@
-package com.snowman.project.model
+package com.snowman.project.model.common
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener

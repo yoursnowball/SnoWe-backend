@@ -5,8 +5,9 @@ spring:
     password: ${DATASOURCE_PASSWORD}
     username: ${DATASOURCE_USERNAME}
   jpa:
+    database: mysql
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       properties:
         hibernate:
           dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -14,6 +15,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
 
 app:
   jwt:
