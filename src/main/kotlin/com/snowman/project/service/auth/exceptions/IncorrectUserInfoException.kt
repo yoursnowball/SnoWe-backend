@@ -1,4 +1,7 @@
 package com.snowman.project.service.auth.exceptions
 
-class IncorrectUserInfoException : RuntimeException() {
+import com.snowman.project.config.exceptions.ApiException
+import com.snowman.project.config.exceptions.ErrorCode
+
+class IncorrectUserInfoException(errorCode:ErrorCode) : ApiException(errorCode) {
 }

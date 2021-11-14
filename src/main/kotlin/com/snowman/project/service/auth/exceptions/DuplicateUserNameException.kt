@@ -1,4 +1,7 @@
 package com.snowman.project.service.auth.exceptions
 
-class DuplicateUserNameException : RuntimeException() {
+import com.snowman.project.config.exceptions.ApiException
+import com.snowman.project.config.exceptions.ErrorCode
+
+class DuplicateUserNameException(errorCode:ErrorCode) : ApiException(errorCode) {
 }

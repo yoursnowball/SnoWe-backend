@@ -1,6 +1,8 @@
-package com.snowman.project.model.goal
+package com.snowman.project.model.goal.entity
 
 import com.snowman.project.model.common.BaseTimeEntity
+import com.snowman.project.model.goal.enums.CharacterType
+import com.snowman.project.model.user.entity.User
 import javax.persistence.*
 
 @Entity
@@ -21,4 +23,16 @@ data class Goal(
 
     @Column(name = "is_deleted")
     var isDeleted: Boolean = false,
-) : BaseTimeEntity()
+
+    @Enumerated(EnumType.STRING)
+    val characterType: CharacterType,
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    val user: User
+) : BaseTimeEntity() {
+
+    fun delete() {
+        this.isDeleted = true
+    }
+}

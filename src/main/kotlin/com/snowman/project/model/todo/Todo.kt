@@ -1,21 +1,21 @@
 package com.snowman.project.model.todo
 
 import com.snowman.project.model.common.BaseTimeEntity
-import com.snowman.project.model.goal.Goal
+import com.snowman.project.model.goal.entity.Goal
 import javax.persistence.*
 
 @Entity
 @Table(name = "todos")
 data class Todo(
-        @Id
+    @Id
     @GeneratedValue
     val id: Long? = null,
 
-        @ManyToOne
+    @ManyToOne
     @JoinColumn(name = "goal_id")
     val goal: Goal,
 
-        @Column(name = "name", length = 20, nullable = false)
+    @Column(name = "name", length = 20, nullable = false)
     var name: String,
 
-        ) : BaseTimeEntity()
+    ) : BaseTimeEntity()

@@ -1,5 +1,6 @@
 package com.snowman.project.service.user
 
+import com.snowman.project.config.exceptions.ErrorCode
 import com.snowman.project.dao.user.UserRepository
 import com.snowman.project.model.user.dto.DetailUserInfoDto
 import com.snowman.project.model.user.dto.SimpleUserInfoDto
@@ -13,17 +14,17 @@ import javax.transaction.Transactional
 class UserService(val userRepository: UserRepository) {
 
     fun updateUserInfo(
-            id: Long,
-            dto: SimpleUserInfoDto
+        id: Long,
+        dto: SimpleUserInfoDto
     ): SimpleUserInfoDto {
-        val user = userRepository.findByIdOrNull(id) ?: throw UserNotExistException()
+        val user = userRepository.findByIdOrNull(id) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
         user.update(dto.nickName, dto.alarmTime)
 
         return SimpleUserInfoDto(user.nickName, user.alarmTime!!)
     }
 
     fun getUserInfo(id: Long): DetailUserInfoDto {
-        val user = userRepository.findByIdOrNull(id) ?: throw UserNotExistException()
+        val user = userRepository.findByIdOrNull(id) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
         return DetailUserInfoDto(user.nickName, user.alarmTime, user.createAt!!)
     }
 }
