@@ -1,4 +1,4 @@
-package com.snowman.project.model.awards
+package com.snowman.project.model.awards.entity
 
 import com.snowman.project.model.common.BaseTimeEntity
 import com.snowman.project.model.goal.entity.Goal
@@ -14,14 +14,13 @@ data class Awards(
     val id: Long? = null,
 
     @MapsId
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id")
     val goal: Goal,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User
-
 
 ) : BaseTimeEntity() {
 }
