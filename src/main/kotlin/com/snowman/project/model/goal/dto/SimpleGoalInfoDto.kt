@@ -9,7 +9,8 @@ class SimpleGoalInfoDto(
     val name: String,
     val createdAt: LocalDateTime,
     val level: Int,
-    val succeedTotalCount: Int,
+    val succeedTodoCount: Int,
+    val levelTodoCount: Int,
     val type: CharacterType
 ) {
     constructor(goal: Goal) : this(
@@ -18,6 +19,7 @@ class SimpleGoalInfoDto(
         goal.createAt!!,
         goal.level,
         goal.succeedTodoCount,
+        goal.levelTodoCount,
         goal.characterType
     )
 }

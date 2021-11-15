@@ -10,6 +10,7 @@ data class AwardInfoDto(
     val awardAt: LocalDateTime,
     val createdAt: LocalDateTime,
     val succeedTodoCount: Int,
+    val totalTodoCount: Int,
     val type: CharacterType,
     val level: Int
 ) {
@@ -19,6 +20,7 @@ data class AwardInfoDto(
         award.createAt!!,
         award.goal.createAt!!,
         award.goal.succeedTodoCount,
+        award.totalTodoCount,
         award.goal.characterType,
         award.goal.level
     )

@@ -7,6 +7,7 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.io.DecodingException
 import io.jsonwebtoken.security.SignatureException
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.filter.OncePerRequestFilter
@@ -46,6 +47,6 @@ class JwtAuthenticationFilter(
     private fun sendErrorMessage(res: HttpServletResponse, code: ErrorCode) {
         res.status = HttpServletResponse.SC_FORBIDDEN;
         res.contentType = MediaType.APPLICATION_JSON_VALUE;
-        res.writer.write(objectMapper.writeValueAsString(ErrorResponse(code.code, code.message)));
+        res.writer.write(objectMapper.writeValueAsString(ErrorResponse(code.code, code.message, HttpStatus.FORBIDDEN.value())));
     }
 }

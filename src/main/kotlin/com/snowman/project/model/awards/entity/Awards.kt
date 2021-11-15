@@ -18,6 +18,9 @@ data class Awards(
     @JoinColumn(name = "id")
     val goal: Goal,
 
+    @Column(name = "total_todo_count")
+    val totalTodoCount: Int,
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     val user: User

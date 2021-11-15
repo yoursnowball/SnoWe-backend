@@ -4,6 +4,7 @@ import com.snowman.project.model.common.BaseTimeEntity
 import com.snowman.project.model.goal.enums.CharacterType
 import com.snowman.project.model.user.entity.User
 import javax.persistence.*
+import kotlin.math.pow
 
 @Entity
 @Table(name = "goals")
@@ -18,11 +19,14 @@ data class Goal(
     @Column(name = "succeed_todo_count")
     var succeedTodoCount: Int = 0,
 
+    @Column(name = "level_todo_count")
+    var levelTodoCount: Int = 0,
+
     @Column(name = "level")
     var level: Int = 0,
 
     @Column(name = "is_deleted")
-    var isDeleted: Boolean = false,
+    var deleted: Boolean = false,
 
     @Enumerated(EnumType.STRING)
     val characterType: CharacterType,
@@ -33,6 +37,20 @@ data class Goal(
 ) : BaseTimeEntity() {
 
     fun delete() {
-        this.isDeleted = true
+        this.deleted = true
+    }
+
+    fun todoSucceed() {
+        succeedTodoCount++
+        levelTodoCount++
+
+        if (isLevelUp()) {
+            levelTodoCount = 0
+            level++
+        }
+    }
+
+    private fun isLevelUp(): Boolean {
+        return levelTodoCount >= (level.toDouble().pow(3)).toInt()
     }
 }

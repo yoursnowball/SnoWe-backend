@@ -17,9 +17,15 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class GoalService(
-    val goalRepository: GoalRepository,
-    val userRepository: UserRepository
+    private val goalRepository: GoalRepository,
+    private val userRepository: UserRepository
 ) {
+
+    @Transactional(readOnly = true)
+    fun getBestDailyGoalsByDates(userId: Long) {
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
+        goalRepository.getBestDailyGoalsByDates(user)
+    }
 
     @Transactional(readOnly = true)
     fun getMyGoal(userId: Long, goalId: Long): SimpleGoalInfoDto {
@@ -28,7 +34,7 @@ class GoalService(
 
         if (goal.user != user)
             throw NotYourContentException(ErrorCode.NOT_YOUR_CONTENT)
-        if (goal.isDeleted)
+        if (goal.deleted)
             throw DeletedContentException(ErrorCode.DELETED_CONTENT)
 
         return SimpleGoalInfoDto(goal)
@@ -37,7 +43,7 @@ class GoalService(
     @Transactional(readOnly = true)
     fun getMyGoals(userId: Long): List<SimpleGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
-        return goalRepository.findAllByUserAAndDeletedIsFalse(user).map { SimpleGoalInfoDto(it) }
+        return goalRepository.findAllByUserAndDeletedIsFalse(user).map { SimpleGoalInfoDto(it) }
     }
 
     fun saveGoal(userId: Long, name: String, type: CharacterType): SimpleGoalInfoDto {

@@ -51,7 +51,9 @@ class TodoService(
         if (goal.user != user || todo.goal != goal)
             throw NotYourContentException(ErrorCode.NOT_YOUR_CONTENT)
 
-        todo.update(name, succeed)
+        if (todo.update(name, succeed))
+            goal.todoSucceed()
+
 
         return TodoInfoDto(todo)
     }

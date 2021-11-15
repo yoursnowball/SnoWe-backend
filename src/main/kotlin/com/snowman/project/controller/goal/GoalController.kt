@@ -2,7 +2,7 @@ package com.snowman.project.controller.goal
 
 import com.snowman.project.config.security.AuthInfo
 import com.snowman.project.config.security.Authenticated
-import com.snowman.project.controller.goal.req.SaveGoalRequest
+import com.snowman.project.controller.goal.req.body.SaveGoalRequest
 import com.snowman.project.controller.goal.res.GetGoalResponse
 import com.snowman.project.controller.goal.res.GetGoalsResponse
 import com.snowman.project.service.goal.GoalService
@@ -21,10 +21,12 @@ class GoalController(
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun getGoals(@Authenticated authInfo: AuthInfo): GetGoalsResponse {
+    fun getGoals(
+        @Authenticated authInfo: AuthInfo,
+    ): GetGoalsResponse {
         val userId = authInfo.id
-
-        return GetGoalsResponse(goalService.getMyGoals(userId))
+        goalService.getBestDailyGoalsByDates(userId)
+        return GetGoalsResponse(listOf())
     }
 
     /**

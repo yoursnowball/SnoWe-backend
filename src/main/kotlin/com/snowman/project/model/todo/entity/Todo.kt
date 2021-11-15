@@ -27,11 +27,13 @@ data class Todo(
 
 ) : BaseTimeEntity() {
 
-    fun update(name: String, succeed: Boolean) {
+    fun update(name: String, succeed: Boolean): Boolean {
         this.name = name
         if (!this.succeed && succeed) {
             this.succeed = succeed
             this.finishedAt = LocalDateTime.now()
+            return true
         }
+        return false
     }
 }

@@ -1,4 +1,4 @@
-package com.snowman.project.controller.goal.req
+package com.snowman.project.controller.goal.req.body
 
 import com.snowman.project.model.goal.enums.CharacterType
 

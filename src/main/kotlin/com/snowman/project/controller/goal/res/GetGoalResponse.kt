@@ -9,7 +9,8 @@ class GetGoalResponse(
     val name: String,
     val createdAt: LocalDateTime,
     val level: Int,
-    val succeedTotalCount: Int,
+    val succeedTodoCount: Int,
+    val levelTodoCount: Int,
     val type: CharacterType
 ) {
     constructor(dto: SimpleGoalInfoDto) : this(
@@ -17,7 +18,8 @@ class GetGoalResponse(
         dto.name,
         dto.createdAt,
         dto.level,
-        dto.succeedTotalCount,
+        dto.succeedTodoCount,
+        dto.levelTodoCount,
         dto.type
     )
 }
