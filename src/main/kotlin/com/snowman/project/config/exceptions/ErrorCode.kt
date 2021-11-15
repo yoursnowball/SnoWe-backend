@@ -18,6 +18,8 @@ enum class ErrorCode(
 
     GOAL_NOT_EXIST("GOAL-001", "목표를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
+    TODO_NOT_EXIST("TODO-001", "투두를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+
     NOT_YOUR_CONTENT("SYSTEM-001", "내 컨텐츠가 아닙니다.", HttpStatus.BAD_REQUEST),
     DELETED_CONTENT("SYSTEM-002", "삭제된 컨텐츠가 아닙니다.", HttpStatus.BAD_REQUEST)
 }
