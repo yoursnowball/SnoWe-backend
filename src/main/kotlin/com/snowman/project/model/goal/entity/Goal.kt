@@ -23,7 +23,7 @@ data class Goal(
     var levelTodoCount: Int = 0,
 
     @Column(name = "level")
-    var level: Int = 0,
+    var level: Int = 1,
 
     @Column(name = "is_deleted")
     var deleted: Boolean = false,

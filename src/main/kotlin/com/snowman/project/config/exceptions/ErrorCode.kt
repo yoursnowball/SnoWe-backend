@@ -3,9 +3,9 @@ package com.snowman.project.config.exceptions
 import org.springframework.http.HttpStatus
 
 enum class ErrorCode(
-    val code: String,
-    val message: String,
-    val status: HttpStatus
+        val code: String,
+        val message: String,
+        val status: HttpStatus
 ) {
     DUPLICATE_USERNAME("AUTH-001", "중복된 아이디입니다.", HttpStatus.BAD_REQUEST),
     WRONG_LOGIN_INFO("AUTH-002", "가입하지 않은 아이디이거나, 잘못된 비밀번호 입니다.", HttpStatus.BAD_REQUEST),
@@ -19,7 +19,8 @@ enum class ErrorCode(
     GOAL_NOT_EXIST("GOAL-001", "목표를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     TODO_NOT_EXIST("TODO-001", "투두를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    CANNOT_DELETE_SUCCEED_TODO("TODO-002", "성공상태인 투두는 삭제 할 수 없습니다.", HttpStatus.BAD_REQUEST),
 
     NOT_YOUR_CONTENT("SYSTEM-001", "내 컨텐츠가 아닙니다.", HttpStatus.BAD_REQUEST),
-    DELETED_CONTENT("SYSTEM-002", "삭제된 컨텐츠가 아닙니다.", HttpStatus.BAD_REQUEST)
+    DELETED_CONTENT("SYSTEM-002", "삭제된 컨텐츠가 입니다.", HttpStatus.BAD_REQUEST)
 }
