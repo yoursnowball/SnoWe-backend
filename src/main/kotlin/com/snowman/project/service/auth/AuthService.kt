@@ -20,7 +20,7 @@ class AuthService(
 
     fun signUp(userName: String, password: String, nickName: String): String {
         if (userRepository.existsByUserName(userName))
-            throw DuplicateUserNameException(ErrorCode.DUPLICATE_USERNAME)
+            throw DuplicateUserNameException()
         val user = userRepository.save(
             User(
                 id = null,
@@ -34,10 +34,10 @@ class AuthService(
 
     fun signIn(userName: String, password: String): String {
         val user =
-            userRepository.findByUserName(userName) ?: throw IncorrectUserInfoException(ErrorCode.WRONG_LOGIN_INFO)
+            userRepository.findByUserName(userName) ?: throw IncorrectUserInfoException()
 
         if (!passwordEncoder.matches(password, user.password))
-            throw IncorrectUserInfoException(ErrorCode.WRONG_LOGIN_INFO)
+            throw IncorrectUserInfoException()
         return jwtTokenProvider.generateToken(user.id!!, user.userName)
     }
 }

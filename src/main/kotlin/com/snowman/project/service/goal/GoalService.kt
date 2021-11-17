@@ -27,31 +27,31 @@ class GoalService(
 
     @Transactional(readOnly = true)
     fun getBestDailyGoalsByDates(userId: Long) {
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         goalRepository.getBestDailyGoalsByDates(user)
     }
 
     @Transactional(readOnly = true)
     fun getMyGoal(userId: Long, goalId: Long, date: LocalDate): DetailGoalInfoDto {
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
-        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException(ErrorCode.GOAL_NOT_EXIST)
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
+        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
 
         if (goal.user != user)
-            throw NotYourContentException(ErrorCode.NOT_YOUR_CONTENT)
+            throw NotYourContentException()
         if (goal.deleted)
-            throw DeletedContentException(ErrorCode.DELETED_CONTENT)
+            throw DeletedContentException()
 
         return DetailGoalInfoDto(goal, todoService.getTodos(user, goal, date))
     }
 
     @Transactional(readOnly = true)
     fun getMyGoals(userId: Long): List<SimpleGoalInfoDto> {
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         return goalRepository.findAllByUserAndDeletedIsFalse(user).map { SimpleGoalInfoDto(it) }
     }
 
     fun saveGoal(userId: Long, name: String, type: CharacterType): DetailGoalInfoDto {
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val goal = goalRepository.save(
                 Goal(
                         name = name,
@@ -63,11 +63,11 @@ class GoalService(
     }
 
     fun deleteGoal(userId: Long, goalId: Long) {
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
-        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException(ErrorCode.GOAL_NOT_EXIST)
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
+        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
 
         if (goal.user != user)
-            throw NotYourContentException(ErrorCode.NOT_YOUR_CONTENT)
+            throw NotYourContentException()
 
         goal.delete()
     }

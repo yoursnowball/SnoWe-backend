@@ -15,7 +15,7 @@ class AwardService(
 ) {
 
     fun getMyAwards(userId: Long): List<AwardInfoDto> {
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         return awardRepository.findByUser(user).map { AwardInfoDto(it) }
     }
 }

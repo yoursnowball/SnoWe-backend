@@ -32,28 +32,28 @@ class TodoService(
         val endDateTime = date.atTime(23, 59, 59, 59)
 
         if (goal.user != user)
-            throw NotYourContentException(ErrorCode.NOT_YOUR_CONTENT)
+            throw NotYourContentException()
         return todoRepository.findAllByGoalAndCreateAtBetween(goal, startDateTime, endDateTime).map { TodoInfoDto(it) }
     }
 
     fun saveTodos(userId: Long, goalId: Long, todos: List<String>): List<TodoInfoDto> {
-        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException(ErrorCode.GOAL_NOT_EXIST)
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
+        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
 
         if (goal.user != user)
-            throw NotYourContentException(ErrorCode.NOT_YOUR_CONTENT)
+            throw NotYourContentException()
         todoRepository.saveAll(todos.map { Todo(goal = goal, name = it) })
 
         return getTodos(user, goal, LocalDate.now())
     }
 
     fun updateToDo(userId: Long, goalId: Long, todoId: Long, name: String, succeed: Boolean): TodoInfoDto {
-        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException(ErrorCode.GOAL_NOT_EXIST)
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
-        val todo = todoRepository.findByIdOrNull(todoId) ?: throw TodoNotExistException(ErrorCode.TODO_NOT_EXIST)
+        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw TodoNotExistException()
 
         if (goal.user != user || todo.goal != goal)
-            throw NotYourContentException(ErrorCode.NOT_YOUR_CONTENT)
+            throw NotYourContentException()
 
         if (todo.update(name, succeed))
             goal.todoSucceed()
@@ -63,15 +63,15 @@ class TodoService(
     }
 
     fun deleteTodo(userId: Long, goalId: Long, todoId: Long) {
-        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException(ErrorCode.GOAL_NOT_EXIST)
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException(ErrorCode.USER_NOT_EXIST)
-        val todo = todoRepository.findByIdOrNull(todoId) ?: throw TodoNotExistException(ErrorCode.TODO_NOT_EXIST)
+        val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw TodoNotExistException()
 
         if (goal.user != user || todo.goal != goal)
-            throw NotYourContentException(ErrorCode.NOT_YOUR_CONTENT)
+            throw NotYourContentException()
 
         if (todo.succeed)
-            throw CannotDeleteSucceedTodoException(ErrorCode.CANNOT_DELETE_SUCCEED_TODO)
+            throw CannotDeleteSucceedTodoException()
 
         todoRepository.delete(todo)
     }
