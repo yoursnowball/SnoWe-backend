@@ -10,7 +10,7 @@ import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder
 import java.time.format.DateTimeFormatter.ofPattern
 
 @Configuration
-open class DateTimeConfiguration : Jackson2ObjectMapperBuilderCustomizer {
+class DateTimeConfiguration : Jackson2ObjectMapperBuilderCustomizer {
     private val dateTimeFormat: String = "yyyy-MM-dd HH:mm:ss"
     private val timeFormat: String = "HH:mm"
 

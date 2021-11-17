@@ -6,9 +6,11 @@ import com.snowman.project.controller.goal.req.body.SaveGoalRequest
 import com.snowman.project.controller.goal.res.GetGoalResponse
 import com.snowman.project.controller.goal.res.GetGoalsResponse
 import com.snowman.project.service.goal.GoalService
+import io.swagger.annotations.ApiOperation
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import springfox.documentation.annotations.ApiIgnore
 import java.time.LocalDate
 import javax.validation.Valid
 
@@ -18,12 +20,11 @@ class GoalController(
         val goalService: GoalService
 ) {
 
-    /**
-     * 부캐리스트 가져오기
-     */
+    @ApiOperation("목표 리스트 가져오기")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun getGoals(
+            @ApiIgnore
             @Authenticated authInfo: AuthInfo,
     ): GetGoalsResponse {
         val userId = authInfo.id
@@ -31,11 +32,10 @@ class GoalController(
         return GetGoalsResponse(listOf())
     }
 
-    /**
-     * Goal(부캐) 생성
-     */
+    @ApiOperation("목표 생성하기")
     @PostMapping
     fun saveGoal(
+            @ApiIgnore
             @Authenticated authInfo: AuthInfo,
             @Valid @RequestBody req: SaveGoalRequest
     ): GetGoalResponse {
@@ -46,24 +46,21 @@ class GoalController(
         )
     }
 
-    /**
-     * Goal(부캐) 가져오기
-     */
+    @ApiOperation("목표 가져오기")
     @GetMapping("/{goalId}")
     @ResponseStatus(HttpStatus.OK)
     fun getGoal(
+            @ApiIgnore
             @Authenticated authInfo: AuthInfo,
             @PathVariable goalId: Long,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate?
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate?
     ): GetGoalResponse {
         val userId = authInfo.id
         val targetDate = date ?: LocalDate.now()
         return GetGoalResponse(goalService.getMyGoal(userId, goalId, targetDate))
     }
 
-    /**
-     * 부캐삭제
-     */
+    @ApiOperation("목표 삭제")
     @DeleteMapping("/{goalId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteGoal(

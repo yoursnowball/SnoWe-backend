@@ -20,6 +20,7 @@ repositories {
 }
 
 dependencies {
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
     implementation("com.querydsl:querydsl-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")

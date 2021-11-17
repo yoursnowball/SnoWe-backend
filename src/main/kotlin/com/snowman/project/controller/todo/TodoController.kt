@@ -7,8 +7,10 @@ import com.snowman.project.controller.todo.req.UpdateTodoRequest
 import com.snowman.project.controller.todo.res.GetTodoResponse
 import com.snowman.project.controller.todo.res.GetTodosResponse
 import com.snowman.project.service.todo.TodoService
+import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
+import springfox.documentation.annotations.ApiIgnore
 import javax.validation.Valid
 
 @RestController
@@ -16,10 +18,7 @@ import javax.validation.Valid
 class TodoController(
         val todoService: TodoService
 ) {
-    /**
-     * ToDoList 생성
-     * List로 한번에 받는게 좋긴함
-     */
+    @ApiOperation("투두리스트 생성")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun makeTodos(
@@ -31,10 +30,7 @@ class TodoController(
         return GetTodosResponse(todoService.saveTodos(userId, goalId, req.todos))
     }
 
-    /**
-     * ToDo 업데이트
-     * 이름, 완료 여부 등등
-     */
+    @ApiOperation("투두 수정")
     @PutMapping("/{todoId}")
     @ResponseStatus(HttpStatus.OK)
     fun updateTodo(
@@ -55,14 +51,13 @@ class TodoController(
         )
     }
 
-    /**
-     * ToDo 삭제
-     */
+    @ApiOperation("투두 삭제")
     @DeleteMapping("/{todoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteTodo(
             @PathVariable goalId: Long,
             @PathVariable todoId: Long,
+            @ApiIgnore
             @Authenticated authInfo: AuthInfo
     ) {
         val userId = authInfo.id
