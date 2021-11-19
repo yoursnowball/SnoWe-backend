@@ -16,15 +16,16 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/goals/{goalId}/todos")
 class TodoController(
-        val todoService: TodoService
+    val todoService: TodoService
 ) {
     @ApiOperation("투두리스트 생성")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     fun makeTodos(
-            @PathVariable goalId: Long,
-            @Authenticated authInfo: AuthInfo,
-            @RequestBody req: SaveTodoRequest
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @PathVariable goalId: Long,
+        @RequestBody req: SaveTodoRequest
     ): GetTodosResponse {
         val userId = authInfo.id
         return GetTodosResponse(todoService.saveTodos(userId, goalId, req.todos))
@@ -34,20 +35,21 @@ class TodoController(
     @PutMapping("/{todoId}")
     @ResponseStatus(HttpStatus.OK)
     fun updateTodo(
-            @PathVariable goalId: Long,
-            @PathVariable todoId: Long,
-            @Authenticated authInfo: AuthInfo,
-            @Valid @RequestBody req: UpdateTodoRequest
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @PathVariable goalId: Long,
+        @PathVariable todoId: Long,
+        @Valid @RequestBody req: UpdateTodoRequest
     ): GetTodoResponse {
         val userId = authInfo.id
         return GetTodoResponse(
-                todoService.updateToDo(
-                        userId = userId,
-                        goalId = goalId,
-                        todoId = todoId,
-                        name = req.name,
-                        succeed = req.succeed
-                )
+            todoService.updateToDo(
+                userId = userId,
+                goalId = goalId,
+                todoId = todoId,
+                name = req.name,
+                succeed = req.succeed
+            )
         )
     }
 
@@ -55,10 +57,10 @@ class TodoController(
     @DeleteMapping("/{todoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteTodo(
-            @PathVariable goalId: Long,
-            @PathVariable todoId: Long,
-            @ApiIgnore
-            @Authenticated authInfo: AuthInfo
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @PathVariable goalId: Long,
+        @PathVariable todoId: Long
     ) {
         val userId = authInfo.id
         todoService.deleteTodo(userId, goalId, todoId)

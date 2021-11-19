@@ -18,5 +18,5 @@ data class TodoInfoDto(
         @ApiModelProperty("투두 완료 시간 (yyyy-MM-dd HH:mm:ss)")
         val finishedAt: LocalDateTime?
 ) {
-    constructor(todo: Todo) : this(todo.id!!, todo.name, todo.succeed, todo.createAt!!, todo.finishedAt)
+    constructor(todo: Todo) : this(todo.id!!, todo.name, todo.succeed, todo.createdAt!!, todo.finishedAt)
 }

@@ -8,5 +8,5 @@ import java.time.LocalDateTime
 
 @Repository
 interface TodoRepository : JpaRepository<Todo, Long>, TodoRepositoryCustom {
-    fun findAllByGoalAndCreateAtBetween(goal: Goal, startDateTime: LocalDateTime, endDateTime:LocalDateTime) : List<Todo>
+    fun findAllByGoalAndCreatedAtBetween(goal: Goal, startDateTime: LocalDateTime, endDateTime:LocalDateTime) : List<Todo>
 }

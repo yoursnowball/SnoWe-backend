@@ -1,6 +1,5 @@
 package com.snowman.project.service.goal
 
-import com.snowman.project.config.exceptions.ErrorCode
 import com.snowman.project.config.exceptions.common.DeletedContentException
 import com.snowman.project.config.exceptions.common.NotYourContentException
 import com.snowman.project.dao.goal.GoalRepository
@@ -20,15 +19,27 @@ import java.time.LocalDate
 @Service
 @Transactional
 class GoalService(
-        private val goalRepository: GoalRepository,
-        private val userRepository: UserRepository,
-        private val todoService: TodoService
+    private val goalRepository: GoalRepository,
+    private val userRepository: UserRepository,
+    private val todoService: TodoService
 ) {
 
     @Transactional(readOnly = true)
-    fun getBestDailyGoalsByDates(userId: Long) {
+    fun getBestDailyGoalsByDates(
+        userId: Long,
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): Map<String, SimpleGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        goalRepository.getBestDailyGoalsByDates(user)
+        val totalDailyMap =
+            goalRepository.getDailyGoalsWithSucceedTodoCountByDateBetween(user, startDate, endDate)
+                .groupBy { it.date }
+
+        val dailyMap: MutableMap<String, SimpleGoalInfoDto> = mutableMapOf()
+        for (dailyInfo in totalDailyMap)
+            dailyMap[dailyInfo.key] = SimpleGoalInfoDto(dailyInfo.value.maxByOrNull { it.succeedTodoCount }!!)
+
+        return dailyMap
     }
 
     @Transactional(readOnly = true)
@@ -53,11 +64,11 @@ class GoalService(
     fun saveGoal(userId: Long, name: String, type: CharacterType): DetailGoalInfoDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val goal = goalRepository.save(
-                Goal(
-                        name = name,
-                        characterType = type,
-                        user = user
-                )
+            Goal(
+                name = name,
+                characterType = type,
+                user = user
+            )
         )
         return DetailGoalInfoDto(goal, listOf())
     }

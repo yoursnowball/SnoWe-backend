@@ -1,6 +1,5 @@
 package com.snowman.project.service.todo
 
-import com.snowman.project.config.exceptions.ErrorCode
 import com.snowman.project.config.exceptions.common.NotYourContentException
 import com.snowman.project.dao.goal.GoalRepository
 import com.snowman.project.dao.todo.TodoRepository
@@ -33,7 +32,7 @@ class TodoService(
 
         if (goal.user != user)
             throw NotYourContentException()
-        return todoRepository.findAllByGoalAndCreateAtBetween(goal, startDateTime, endDateTime).map { TodoInfoDto(it) }
+        return todoRepository.findAllByGoalAndCreatedAtBetween(goal, startDateTime, endDateTime).map { TodoInfoDto(it) }
     }
 
     fun saveTodos(userId: Long, goalId: Long, todos: List<String>): List<TodoInfoDto> {

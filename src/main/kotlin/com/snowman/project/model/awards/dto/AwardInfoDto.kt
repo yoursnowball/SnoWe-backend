@@ -28,8 +28,8 @@ data class AwardInfoDto(
     constructor(award: Awards) : this(
             award.id!!,
             award.goal.name,
-            award.createAt!!,
-            award.goal.createAt!!,
+            award.createdAt!!,
+            award.goal.createdAt!!,
             award.goal.succeedTodoCount,
             award.totalTodoCount,
             award.goal.characterType,

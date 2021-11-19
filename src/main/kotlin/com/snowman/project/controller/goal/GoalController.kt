@@ -17,32 +17,44 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/goals")
 class GoalController(
-        val goalService: GoalService
+    val goalService: GoalService
 ) {
 
-    @ApiOperation("목표 리스트 가져오기")
-    @GetMapping
+    @ApiOperation("기간내에 제일 많이 수행한 목표 리스트 리턴")
+    @GetMapping("/calendar")
     @ResponseStatus(HttpStatus.OK)
     fun getGoals(
-            @ApiIgnore
-            @Authenticated authInfo: AuthInfo,
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @RequestParam(required = true)
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        start: LocalDate,
+        @RequestParam(required = true)
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        end: LocalDate
+
     ): GetGoalsResponse {
         val userId = authInfo.id
-        goalService.getBestDailyGoalsByDates(userId)
-        return GetGoalsResponse(listOf())
+        return GetGoalsResponse(
+            goalService.getBestDailyGoalsByDates(
+                userId,
+                start,
+                end
+            )
+        )
     }
 
     @ApiOperation("목표 생성하기")
     @PostMapping
     fun saveGoal(
-            @ApiIgnore
-            @Authenticated authInfo: AuthInfo,
-            @Valid @RequestBody req: SaveGoalRequest
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @Valid @RequestBody req: SaveGoalRequest
     ): GetGoalResponse {
         val userId = authInfo.id
 
         return GetGoalResponse(
-                goalService.saveGoal(userId, req.name, req.type),
+            goalService.saveGoal(userId, req.name, req.type),
         )
     }
 
@@ -50,10 +62,10 @@ class GoalController(
     @GetMapping("/{goalId}")
     @ResponseStatus(HttpStatus.OK)
     fun getGoal(
-            @ApiIgnore
-            @Authenticated authInfo: AuthInfo,
-            @PathVariable goalId: Long,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate?
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @PathVariable goalId: Long,
+        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate?
     ): GetGoalResponse {
         val userId = authInfo.id
         val targetDate = date ?: LocalDate.now()
@@ -64,8 +76,8 @@ class GoalController(
     @DeleteMapping("/{goalId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteGoal(
-            @Authenticated authInfo: AuthInfo,
-            @PathVariable goalId: Long
+        @Authenticated authInfo: AuthInfo,
+        @PathVariable goalId: Long
     ) {
         val userId = authInfo.id
         goalService.deleteGoal(userId, goalId)

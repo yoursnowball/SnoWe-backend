@@ -12,5 +12,5 @@ import javax.persistence.MappedSuperclass
 open class BaseTimeEntity() {
     @Column(name = "created_at")
     @CreatedDate
-    var createAt: LocalDateTime? = null
+    var createdAt: LocalDateTime? = null
 }

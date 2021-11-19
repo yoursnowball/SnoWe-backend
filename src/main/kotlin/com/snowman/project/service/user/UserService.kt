@@ -25,6 +25,6 @@ class UserService(val userRepository: UserRepository) {
 
     fun getUserInfo(id: Long): DetailUserInfoDto {
         val user = userRepository.findByIdOrNull(id) ?: throw UserNotExistException()
-        return DetailUserInfoDto(user.nickName, user.alarmTime, user.createAt!!)
+        return DetailUserInfoDto(user.nickName, user.alarmTime, user.createdAt!!)
     }
 }
