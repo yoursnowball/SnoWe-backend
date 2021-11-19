@@ -1,9 +1,9 @@
 package com.snowman.project.service.auth
 
-import com.snowman.project.config.exceptions.ErrorCode
 import com.snowman.project.config.security.JwtTokenProvider
 import com.snowman.project.dao.user.UserRepository
 import com.snowman.project.model.user.entity.User
+import com.snowman.project.service.auth.exceptions.DuplicateNickNameException
 import com.snowman.project.service.auth.exceptions.DuplicateUserNameException
 import com.snowman.project.service.auth.exceptions.IncorrectUserInfoException
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -21,6 +21,9 @@ class AuthService(
     fun signUp(userName: String, password: String, nickName: String): String {
         if (userRepository.existsByUserName(userName))
             throw DuplicateUserNameException()
+        if (userRepository.existsByNickName(nickName))
+            throw DuplicateNickNameException()
+
         val user = userRepository.save(
             User(
                 id = null,
