@@ -9,6 +9,7 @@ import com.snowman.project.model.todo.dto.TodoInfoDto
 import com.snowman.project.model.todo.entity.Todo
 import com.snowman.project.model.user.entity.User
 import com.snowman.project.service.goal.exceptions.GoalNotExistException
+import com.snowman.project.service.todo.exceptions.CannotAddTodoException
 import com.snowman.project.service.todo.exceptions.CannotDeleteSucceedTodoException
 import com.snowman.project.service.todo.exceptions.TodoNotExistException
 import com.snowman.project.service.user.exceptions.UserNotExistException
@@ -20,9 +21,9 @@ import java.time.LocalDate
 @Service
 @Transactional
 class TodoService(
-        private val todoRepository: TodoRepository,
-        private val goalRepository: GoalRepository,
-        private val userRepository: UserRepository
+    private val todoRepository: TodoRepository,
+    private val goalRepository: GoalRepository,
+    private val userRepository: UserRepository
 ) {
 
     @Transactional(readOnly = true)
@@ -41,6 +42,9 @@ class TodoService(
 
         if (goal.user != user)
             throw NotYourContentException()
+        if (goal.deleted || goal.awarded)
+            throw CannotAddTodoException()
+
         todoRepository.saveAll(todos.map { Todo(goal = goal, name = it) })
 
         return getTodos(user, goal, LocalDate.now())

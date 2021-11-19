@@ -20,8 +20,13 @@ enum class ErrorCode(
 
     TODO_NOT_EXIST("TODO-001", "투두를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     CANNOT_DELETE_SUCCEED_TODO("TODO-002", "성공상태인 투두는 삭제 할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNOT_ADD_TODO("TODO-003", "삭제되었거나, 명예의전당에 올라간 목표에는 투두를 작성할 수 없습니다.", HttpStatus.BAD_REQUEST),
 
     NOT_YOUR_CONTENT("SYSTEM-001", "내 컨텐츠가 아닙니다.", HttpStatus.BAD_REQUEST),
     DELETED_CONTENT("SYSTEM-002", "삭제된 컨텐츠가 입니다.", HttpStatus.BAD_REQUEST),
-    DATE_RANGE_EXCEPTION("SYSTEM-003", "유효하지 않은 날짜 범위입니다.", HttpStatus.BAD_REQUEST)
+    DATE_RANGE_EXCEPTION("SYSTEM-003", "유효하지 않은 날짜 범위입니다.", HttpStatus.BAD_REQUEST),
+
+    CANNOT_MOVE_TO_AWARDS("AWARD-001", "명예의 전당으로 이동하기 충분한 레벨이 아닙니다.", HttpStatus.BAD_REQUEST)
+
+
 }

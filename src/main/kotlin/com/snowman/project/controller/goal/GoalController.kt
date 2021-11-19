@@ -2,9 +2,11 @@ package com.snowman.project.controller.goal
 
 import com.snowman.project.config.security.AuthInfo
 import com.snowman.project.config.security.Authenticated
+import com.snowman.project.controller.awards.res.GetAwardResponse
 import com.snowman.project.controller.goal.req.body.SaveGoalRequest
 import com.snowman.project.controller.goal.res.GetGoalResponse
 import com.snowman.project.controller.goal.res.GetGoalsResponse
+import com.snowman.project.service.awards.AwardService
 import com.snowman.project.service.goal.GoalService
 import io.swagger.annotations.ApiOperation
 import org.springframework.format.annotation.DateTimeFormat
@@ -17,7 +19,8 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/goals")
 class GoalController(
-    val goalService: GoalService
+    val goalService: GoalService,
+    val awardService: AwardService
 ) {
 
     @ApiOperation("기간내에 제일 많이 수행한 목표 리스트 리턴")
@@ -56,6 +59,17 @@ class GoalController(
         return GetGoalResponse(
             goalService.saveGoal(userId, req.name, req.objective, req.type),
         )
+    }
+
+    @ApiOperation("목표 명예의 전당으로 보내기")
+    @PostMapping("/{goalId}/awards")
+    fun moveToAwards(
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @RequestParam goalId: Long
+    ): GetAwardResponse {
+        val userId = authInfo.id
+        return GetAwardResponse(awardService.saveAwards(userId, goalId))
     }
 
     @ApiOperation("목표 가져오기")

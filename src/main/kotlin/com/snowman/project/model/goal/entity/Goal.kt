@@ -31,6 +31,9 @@ data class Goal(
     @Column(name = "is_deleted")
     var deleted: Boolean = false,
 
+    @Column(name = "is_award")
+    var awarded: Boolean = false,
+
     @Enumerated(EnumType.STRING)
     val characterType: CharacterType,
 
@@ -38,6 +41,10 @@ data class Goal(
     @JoinColumn(name = "user_id", nullable = false)
     val user: User
 ) : BaseTimeEntity() {
+
+    fun canMoveToAwards(): Boolean {
+        return level >= 5;
+    }
 
     fun delete() {
         this.deleted = true
@@ -56,4 +63,5 @@ data class Goal(
     private fun isLevelUp(): Boolean {
         return levelTodoCount >= (level.toDouble().pow(3)).toInt()
     }
+
 }
