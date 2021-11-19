@@ -10,11 +10,14 @@ import kotlin.math.pow
 @Table(name = "goals")
 data class Goal(
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     @Column(name = "name", length = 20, nullable = false)
     val name: String,
+
+    @Column(name = "objective", nullable = false)
+    val objective: String,
 
     @Column(name = "succeed_todo_count")
     var succeedTodoCount: Int = 0,

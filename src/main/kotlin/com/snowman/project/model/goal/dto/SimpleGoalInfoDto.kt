@@ -13,6 +13,8 @@ class SimpleGoalInfoDto(
     val id: Long,
     @ApiModelProperty("목표 이름")
     val name: String,
+    @ApiModelProperty("목표 설정")
+    val objective: String,
     @ApiModelProperty("목표 생성일")
     val createdAt: LocalDateTime,
     @ApiModelProperty("레벨")
@@ -25,6 +27,7 @@ class SimpleGoalInfoDto(
     constructor(goal: Goal) : this(
         goal.id!!,
         goal.name,
+        goal.objective,
         goal.createdAt!!,
         goal.level,
         goal.succeedTodoCount,
@@ -34,6 +37,7 @@ class SimpleGoalInfoDto(
     constructor(dto: DailyGoalAndSucceedTodoNumDto) : this(
         dto.id,
         dto.name,
+        dto.objective,
         dto.createdAt,
         dto.level,
         dto.succeedTodoCount,

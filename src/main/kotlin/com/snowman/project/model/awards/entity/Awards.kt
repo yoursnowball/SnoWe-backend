@@ -10,7 +10,7 @@ import javax.persistence.*
 @Table(name = "awards")
 data class Awards(
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     @MapsId

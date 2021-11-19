@@ -1,8 +1,10 @@
 package com.snowman.project.service.goal
 
+import com.snowman.project.config.exceptions.common.DateRangeException
 import com.snowman.project.config.exceptions.common.DeletedContentException
 import com.snowman.project.config.exceptions.common.NotYourContentException
 import com.snowman.project.dao.goal.GoalRepository
+import com.snowman.project.dao.goal.projections.DailyGoalAndSucceedTodoNumDto
 import com.snowman.project.dao.user.UserRepository
 import com.snowman.project.model.goal.dto.DetailGoalInfoDto
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
@@ -31,11 +33,15 @@ class GoalService(
         endDate: LocalDate
     ): Map<String, SimpleGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        val totalDailyMap =
+        val dailyMap: MutableMap<String, SimpleGoalInfoDto> = mutableMapOf()
+
+        if (startDate.isAfter(endDate))
+            throw DateRangeException()
+
+        val totalDailyMap: Map<String, List<DailyGoalAndSucceedTodoNumDto>> =
             goalRepository.getDailyGoalsWithSucceedTodoCountByDateBetween(user, startDate, endDate)
                 .groupBy { it.date }
 
-        val dailyMap: MutableMap<String, SimpleGoalInfoDto> = mutableMapOf()
         for (dailyInfo in totalDailyMap)
             dailyMap[dailyInfo.key] = SimpleGoalInfoDto(dailyInfo.value.maxByOrNull { it.succeedTodoCount }!!)
 
@@ -61,11 +67,12 @@ class GoalService(
         return goalRepository.findAllByUserAndDeletedIsFalse(user).map { SimpleGoalInfoDto(it) }
     }
 
-    fun saveGoal(userId: Long, name: String, type: CharacterType): DetailGoalInfoDto {
+    fun saveGoal(userId: Long, name: String, objective: String, type: CharacterType): DetailGoalInfoDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val goal = goalRepository.save(
             Goal(
                 name = name,
+                objective = objective,
                 characterType = type,
                 user = user
             )

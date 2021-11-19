@@ -9,7 +9,7 @@ import javax.persistence.*
 @Table(name = "todos")
 data class Todo(
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     @ManyToOne

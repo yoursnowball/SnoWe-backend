@@ -30,6 +30,7 @@ class GoalRepositoryImpl(
                 QDailyGoalAndSucceedTodoNumDto(
                     goal.id!!,
                     goal.name,
+                    goal.objective,
                     goal.level,
                     goal.characterType,
                     date,

@@ -6,9 +6,11 @@ import io.swagger.annotations.ApiModelProperty
 
 @ApiModel("목표 생성 요청")
 data class SaveGoalRequest(
-        @ApiModelProperty("목표 이름")
-        val name: String,
-        @ApiModelProperty("목표 캐릭터 종류")
-        val type: CharacterType
+    @ApiModelProperty("목표 이름")
+    val name: String,
+    @ApiModelProperty("목표 설정")
+    val objective: String,
+    @ApiModelProperty("목표 캐릭터 종류")
+    val type: CharacterType
 ) {
 }

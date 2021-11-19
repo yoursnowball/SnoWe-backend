@@ -54,7 +54,7 @@ class GoalController(
         val userId = authInfo.id
 
         return GetGoalResponse(
-            goalService.saveGoal(userId, req.name, req.type),
+            goalService.saveGoal(userId, req.name, req.objective, req.type),
         )
     }
 

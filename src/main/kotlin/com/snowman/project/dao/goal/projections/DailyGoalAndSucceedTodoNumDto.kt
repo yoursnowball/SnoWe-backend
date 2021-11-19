@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 data class DailyGoalAndSucceedTodoNumDto @QueryProjection constructor(
     val id: Long,
     val name: String,
+    val objective: String,
     val level: Int,
     val type: CharacterType,
     val date: String,
