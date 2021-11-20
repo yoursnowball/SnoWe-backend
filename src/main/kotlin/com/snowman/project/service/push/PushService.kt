@@ -1,53 +1,77 @@
 package com.snowman.project.service.push
 
 import com.google.firebase.messaging.*
+import com.snowman.project.dao.push.PushRepository
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
-import com.snowman.project.model.push.dto.PushDto
+import com.snowman.project.model.push.dto.SendPushMessageDto
+import com.snowman.project.model.push.entity.PushMessage
 import com.snowman.project.model.push.enums.PushType
 import com.snowman.project.model.user.entity.User
 import com.snowman.project.utils.push.PushUtil
 import org.springframework.stereotype.Service
 
 @Service
-class PushService {
+class PushService(
+    val pushRepository: PushRepository
+) {
     @Throws(FirebaseMessagingException::class)
     fun sendPushMessages(userList: List<User>, type: PushType) {
         val tokenList = userList.map { it.fcmToken!! }
-        var pushDto: PushDto? = null
+        var sendPushMessageDto: SendPushMessageDto? = null
 
         when (type) {
             PushType.WRITE -> {
-                pushDto = PushUtil.todoWriteAlarm()
+                sendPushMessageDto = PushUtil.todoWriteAlarm()
             }
-            PushType.DEADLINE -> {
-                pushDto = PushUtil.getDeadLineAlarm()
+            PushType.CHEERUP -> {
+                sendPushMessageDto = PushUtil.getCheerUpAlarm()
             }
         }
-        pushDto?.let { sendIOS(tokenList, it) }
+        sendPushMessageDto?.let {
+            userList.forEach { user ->
+                pushRepository.save(
+                    PushMessage(
+                        user = user,
+                        title = it.title,
+                        body = it.body
+                    )
+                )
+            }
+            sendIOS(tokenList, it)
+        }
     }
 
     @Throws(FirebaseMessagingException::class)
     fun sendPushMessage(user: User, type: PushType, dto: SimpleGoalInfoDto) {
         val token = user.fcmToken!!
-        var pushDto: PushDto? = null
+        var sendPushMessageDto: SendPushMessageDto? = null
         when (type) {
             PushType.ALLCLEAR -> {
-                pushDto = PushUtil.allClearAlarm(dto.objective)
+                sendPushMessageDto = PushUtil.allClearAlarm(dto.objective)
             }
             PushType.LEVELUP -> {
-                pushDto = PushUtil.levelUpAlarm(dto.name, dto.level)
+                sendPushMessageDto = PushUtil.levelUpAlarm(dto.name, dto.level)
             }
             PushType.WRITE -> {
-                pushDto = PushUtil.todoWriteAlarm()
+                sendPushMessageDto = PushUtil.todoWriteAlarm()
             }
         }
-        pushDto?.let { sendIOS(token, pushDto) }
+        sendPushMessageDto?.let {
+            pushRepository.save(
+                PushMessage(
+                    user = user,
+                    title = it.title,
+                    body = it.body
+                )
+            )
+            sendIOS(token, sendPushMessageDto)
+        }
     }
 
-    private fun sendIOS(token: String, pushDto: PushDto) {
+    private fun sendIOS(token: String, sendPushMessageDto: SendPushMessageDto) {
         val message = Message.builder()
-            .setNotification(Notification(pushDto.title, pushDto.body))
-            .putData("title", pushDto.title)
+            .setNotification(Notification(sendPushMessageDto.title, sendPushMessageDto.body))
+            .putData("title", sendPushMessageDto.title)
             .setToken(token)
             .setApnsConfig(
                 ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).build()
@@ -55,11 +79,11 @@ class PushService {
         FirebaseMessaging.getInstance().send(message)
     }
 
-    private fun sendIOS(tokenList: List<String>, pushDto: PushDto): Int {
+    private fun sendIOS(tokenList: List<String>, sendPushMessageDto: SendPushMessageDto): Int {
         return if (tokenList.isNotEmpty()) {
             val multicast = MulticastMessage.builder()
-                .setNotification(Notification(pushDto.title, pushDto.body))
-                .putData("title", pushDto.title)
+                .setNotification(Notification(sendPushMessageDto.title, sendPushMessageDto.body))
+                .putData("title", sendPushMessageDto.title)
                 .addAllTokens(tokenList)
                 .setApnsConfig(
                     ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).build()

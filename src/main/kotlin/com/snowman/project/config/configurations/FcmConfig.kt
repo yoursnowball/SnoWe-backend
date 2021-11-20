@@ -14,7 +14,7 @@ open class FcmConfig {
     @PostConstruct
     @Throws(IOException::class)
     open fun initFcm() {
-        val serviceAccount = ClassPathResource("firebase/firebase-adminSdk-key.json").inputStream
+        val serviceAccount = ClassPathResource("firebase/snowe-firebase-adminsdk.json").inputStream
         var firebaseApp: FirebaseApp? = null
         val firebaseApps = FirebaseApp.getApps()
 
@@ -27,7 +27,6 @@ open class FcmConfig {
         } else {
             val options: FirebaseOptions = FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://ground-1b3d3.firebaseio.com")
                 .build()
             FirebaseApp.initializeApp(options)
         }

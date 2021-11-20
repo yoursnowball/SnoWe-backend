@@ -5,7 +5,6 @@ import java.time.LocalTime
 
 data class DetailUserInfoDto(
         val nickName: String,
-        val alarmTime: LocalTime?,
         val createdAt: LocalDateTime
 ) {
 }

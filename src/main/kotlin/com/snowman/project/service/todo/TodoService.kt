@@ -4,11 +4,14 @@ import com.snowman.project.config.exceptions.common.NotYourContentException
 import com.snowman.project.dao.goal.GoalRepository
 import com.snowman.project.dao.todo.TodoRepository
 import com.snowman.project.dao.user.UserRepository
+import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
 import com.snowman.project.model.goal.entity.Goal
+import com.snowman.project.model.push.enums.PushType
 import com.snowman.project.model.todo.dto.TodoInfoDto
 import com.snowman.project.model.todo.entity.Todo
 import com.snowman.project.model.user.entity.User
 import com.snowman.project.service.goal.exceptions.GoalNotExistException
+import com.snowman.project.service.push.PushService
 import com.snowman.project.service.todo.exceptions.CannotAddTodoException
 import com.snowman.project.service.todo.exceptions.CannotDeleteSucceedTodoException
 import com.snowman.project.service.todo.exceptions.CannotEditTodoException
@@ -24,7 +27,8 @@ import java.time.LocalDate
 class TodoService(
     private val todoRepository: TodoRepository,
     private val goalRepository: GoalRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val pushService: PushService
 ) {
 
     @Transactional(readOnly = true)
@@ -62,8 +66,14 @@ class TodoService(
         if (!todo.canUpdateOrDelete())
             throw CannotEditTodoException()
 
-        if (todo.update(name, succeed))
-            goal.todoSucceed()
+        if (todo.update(name, succeed)) {
+            val isLevelUp = goal.todoSucceed()
+            if (isLevelUp)
+                pushService.sendPushMessage(user, PushType.LEVELUP, SimpleGoalInfoDto(goal))
+
+            if (todoRepository.countAllByGoalAndTodoDateAndSucceedIsFalse(goal, LocalDate.now()) == 0)
+                pushService.sendPushMessage(user, PushType.ALLCLEAR, SimpleGoalInfoDto(goal))
+        }
 
         return TodoInfoDto(todo)
     }

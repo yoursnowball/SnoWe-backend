@@ -19,7 +19,7 @@ data class Todo(
     val goal: Goal,
 
     @ManyToOne
-    @JoinColumn(name = "goal_id")
+    @JoinColumn(name = "user_id")
     val user: User,
 
     @Column(name = "name", length = 20, nullable = false)
@@ -48,6 +48,6 @@ data class Todo(
     }
 
     fun canUpdateOrDelete(): Boolean {
-        return todoDate.isEqual(LocalDate.now())
+        return todoDate.isAfter(LocalDate.now()) || todoDate.isEqual(LocalDate.now())
     }
 }

@@ -3,11 +3,9 @@ package com.snowman.project.controller.user
 import com.snowman.project.config.security.AuthInfo
 import com.snowman.project.config.security.Authenticated
 import com.snowman.project.controller.user.req.RegisterTokenRequest
-import com.snowman.project.controller.user.req.UpdateUserInfoRequest
+import com.snowman.project.controller.user.res.GetAlarmHistoryResponse
 import com.snowman.project.controller.user.res.GetUserInfoResponse
 import com.snowman.project.controller.user.res.RegisterFcmTokenResponse
-import com.snowman.project.controller.user.res.UpdateUserInfoResponse
-import com.snowman.project.model.user.dto.SimpleUserInfoDto
 import com.snowman.project.service.goal.GoalService
 import com.snowman.project.service.user.UserService
 import io.swagger.annotations.ApiOperation
@@ -44,5 +42,17 @@ class UserController(
     ): RegisterFcmTokenResponse {
         val userId = authInfo.id
         return RegisterFcmTokenResponse(userService.registerFcmToken(userId, req.token))
+    }
+
+    @ApiOperation("알람 이력 가져오기")
+    @GetMapping("/alarms")
+    fun getAlarmHistory(
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo
+    ): GetAlarmHistoryResponse {
+        val userId = authInfo.id
+        return GetAlarmHistoryResponse(
+            userService.getAlarmHistory(userId)
+        )
     }
 }

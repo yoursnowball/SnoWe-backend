@@ -54,14 +54,16 @@ data class Goal(
         this.awarded = true
     }
 
-    fun todoSucceed() {
+    fun todoSucceed(): Boolean {
         succeedTodoCount++
         levelTodoCount++
 
         if (isLevelUp()) {
             levelTodoCount = 0
             level++
+            return true
         }
+        return false
     }
 
     private fun isLevelUp(): Boolean {

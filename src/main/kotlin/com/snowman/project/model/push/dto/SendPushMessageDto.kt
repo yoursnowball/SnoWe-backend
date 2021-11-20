@@ -1,6 +1,6 @@
 package com.snowman.project.model.push.dto
 
-class PushDto(
+class SendPushMessageDto(
     val title: String,
     val body: String
 ) {
