@@ -10,6 +10,7 @@ import com.snowman.project.model.goal.dto.DetailGoalInfoDto
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
 import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.goal.enums.CharacterType
+import com.snowman.project.service.goal.exceptions.CannotDeleteGoalException
 import com.snowman.project.service.goal.exceptions.GoalNotExistException
 import com.snowman.project.service.todo.TodoService
 import com.snowman.project.service.user.exceptions.UserNotExistException
@@ -86,6 +87,8 @@ class GoalService(
 
         if (goal.user != user)
             throw NotYourContentException()
+        if (goal.awarded)
+            throw CannotDeleteGoalException()
 
         goal.delete()
     }
