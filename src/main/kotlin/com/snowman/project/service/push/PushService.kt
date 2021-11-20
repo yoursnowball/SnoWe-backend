@@ -16,7 +16,7 @@ class PushService(
 ) {
     @Throws(FirebaseMessagingException::class)
     fun sendPushMessages(userList: List<User>, type: PushType) {
-        val tokenList = userList.map { it.fcmToken!! }
+        val tokenList = userList.map { it.fcmToken }.filterNotNull()
         var sendPushMessageDto: SendPushMessageDto? = null
 
         when (type) {
@@ -43,28 +43,30 @@ class PushService(
 
     @Throws(FirebaseMessagingException::class)
     fun sendPushMessage(user: User, type: PushType, dto: SimpleGoalInfoDto) {
-        val token = user.fcmToken!!
-        var sendPushMessageDto: SendPushMessageDto? = null
-        when (type) {
-            PushType.ALLCLEAR -> {
-                sendPushMessageDto = PushUtil.allClearAlarm(dto.objective)
+        val token = user.fcmToken
+        token?.let {
+            var sendPushMessageDto: SendPushMessageDto? = null
+            when (type) {
+                PushType.ALLCLEAR -> {
+                    sendPushMessageDto = PushUtil.allClearAlarm(dto.objective)
+                }
+                PushType.LEVELUP -> {
+                    sendPushMessageDto = PushUtil.levelUpAlarm(dto.name, dto.level)
+                }
+                PushType.WRITE -> {
+                    sendPushMessageDto = PushUtil.todoWriteAlarm()
+                }
             }
-            PushType.LEVELUP -> {
-                sendPushMessageDto = PushUtil.levelUpAlarm(dto.name, dto.level)
-            }
-            PushType.WRITE -> {
-                sendPushMessageDto = PushUtil.todoWriteAlarm()
-            }
-        }
-        sendPushMessageDto?.let {
-            pushRepository.save(
-                PushMessage(
-                    user = user,
-                    title = it.title,
-                    body = it.body
+            sendPushMessageDto?.let {
+                pushRepository.save(
+                    PushMessage(
+                        user = user,
+                        title = it.title,
+                        body = it.body
+                    )
                 )
-            )
-            sendIOS(token, sendPushMessageDto)
+                sendIOS(token, sendPushMessageDto)
+            }
         }
     }
 
