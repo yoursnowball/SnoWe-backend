@@ -22,6 +22,7 @@ enum class ErrorCode(
     TODO_NOT_EXIST("TODO-001", "투두를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     CANNOT_DELETE_SUCCEED_TODO("TODO-002", "성공상태인 투두는 삭제 할 수 없습니다.", HttpStatus.BAD_REQUEST),
     CANNOT_ADD_TODO("TODO-003", "삭제되었거나, 명예의전당에 올라간 목표에는 투두를 작성할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    CANNT_EDIT_PAST_TODO("TODO-004", "과거의 투두는 수정하거나 삭제 할 수 없습니다.", HttpStatus.BAD_REQUEST),
 
     NOT_YOUR_CONTENT("SYSTEM-001", "내 컨텐츠가 아닙니다.", HttpStatus.BAD_REQUEST),
     DELETED_CONTENT("SYSTEM-002", "삭제된 컨텐츠가 입니다.", HttpStatus.BAD_REQUEST),

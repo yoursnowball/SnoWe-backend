@@ -11,6 +11,7 @@ import com.snowman.project.model.user.entity.User
 import com.snowman.project.service.goal.exceptions.GoalNotExistException
 import com.snowman.project.service.todo.exceptions.CannotAddTodoException
 import com.snowman.project.service.todo.exceptions.CannotDeleteSucceedTodoException
+import com.snowman.project.service.todo.exceptions.CannotEditTodoException
 import com.snowman.project.service.todo.exceptions.TodoNotExistException
 import com.snowman.project.service.user.exceptions.UserNotExistException
 import org.springframework.data.repository.findByIdOrNull
@@ -58,9 +59,11 @@ class TodoService(
         if (goal.user != user || todo.goal != goal)
             throw NotYourContentException()
 
+        if (!todo.canUpdateOrDelete())
+            throw CannotEditTodoException()
+
         if (todo.update(name, succeed))
             goal.todoSucceed()
-
 
         return TodoInfoDto(todo)
     }
@@ -72,6 +75,9 @@ class TodoService(
 
         if (goal.user != user || todo.goal != goal)
             throw NotYourContentException()
+
+        if (!todo.canUpdateOrDelete())
+            throw CannotEditTodoException()
 
         if (todo.succeed)
             throw CannotDeleteSucceedTodoException()

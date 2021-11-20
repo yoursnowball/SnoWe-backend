@@ -2,6 +2,7 @@ package com.snowman.project.model.todo.entity
 
 import com.snowman.project.model.common.BaseTimeEntity
 import com.snowman.project.model.goal.entity.Goal
+import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -35,5 +36,9 @@ data class Todo(
             return true
         }
         return false
+    }
+
+    fun canUpdateOrDelete(): Boolean {
+        return createdAt!!.toLocalDate().isEqual(LocalDate.now())
     }
 }
