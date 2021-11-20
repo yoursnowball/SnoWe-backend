@@ -31,4 +31,9 @@ data class User(
         this.nickName = nickName
         this.alarmTime = alarmTime
     }
+
+    fun registerFcmToken(token: String): String {
+        fcmToken = token
+        return fcmToken!!
+    }
 }

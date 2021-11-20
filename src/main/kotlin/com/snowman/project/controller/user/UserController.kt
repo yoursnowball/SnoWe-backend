@@ -2,8 +2,10 @@ package com.snowman.project.controller.user
 
 import com.snowman.project.config.security.AuthInfo
 import com.snowman.project.config.security.Authenticated
+import com.snowman.project.controller.user.req.RegisterTokenRequest
 import com.snowman.project.controller.user.req.UpdateUserInfoRequest
 import com.snowman.project.controller.user.res.GetUserInfoResponse
+import com.snowman.project.controller.user.res.RegisterFcmTokenResponse
 import com.snowman.project.controller.user.res.UpdateUserInfoResponse
 import com.snowman.project.model.user.dto.SimpleUserInfoDto
 import com.snowman.project.service.goal.GoalService
@@ -16,38 +18,49 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/users")
 class UserController(
-        val userService: UserService,
-        val goalService: GoalService
+    val userService: UserService,
+    val goalService: GoalService
 ) {
 
     @ApiOperation("내 정보 가져오기")
     @GetMapping
     fun getMyInfo(
-            @ApiIgnore
-            @Authenticated authInfo: AuthInfo
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo
     ): GetUserInfoResponse {
         val userId = authInfo.id
         return GetUserInfoResponse(
-                userService.getUserInfo(userId),
-                goalService.getMyGoals(userId)
+            userService.getUserInfo(userId),
+            goalService.getMyGoals(userId)
         )
     }
 
     @ApiOperation("내 정보 수정")
     @PutMapping
     fun updateMyInfo(
-            @ApiIgnore
-            @Authenticated authInfo: AuthInfo,
-            @Valid @RequestBody reqUser: UpdateUserInfoRequest
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @Valid @RequestBody reqUser: UpdateUserInfoRequest
     ): UpdateUserInfoResponse {
         return UpdateUserInfoResponse(
-                userService.updateUserInfo(
-                        authInfo.id,
-                        SimpleUserInfoDto(
-                                reqUser.nickName,
-                                reqUser.alarmTime
-                        )
+            userService.updateUserInfo(
+                authInfo.id,
+                SimpleUserInfoDto(
+                    reqUser.nickName,
+                    reqUser.alarmTime
                 )
+            )
         )
+    }
+
+    @ApiOperation("Fcm token 저장 및 수정")
+    @PostMapping
+    fun registerFcmToken(
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @Valid @RequestBody req: RegisterTokenRequest
+    ): RegisterFcmTokenResponse {
+        val userId = authInfo.id
+        return RegisterFcmTokenResponse(userService.registerFcmToken(userId, req.token))
     }
 }

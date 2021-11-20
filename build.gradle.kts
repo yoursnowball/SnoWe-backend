@@ -32,6 +32,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.10.5")
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
+    implementation("com.google.firebase:firebase-admin:6.8.1")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.10.7")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.10.7")
     runtimeOnly("mysql:mysql-connector-java")
