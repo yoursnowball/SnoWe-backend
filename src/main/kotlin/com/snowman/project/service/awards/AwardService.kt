@@ -47,9 +47,10 @@ class AwardService(
             throw NotYourContentException()
         if (goal.deleted)
             throw DeletedContentException()
-        if (goal.canMoveToAwards())
+        if (!goal.canMoveToAwards())
             throw CannotMoveToAwardsException()
 
+        goal.moveToAward()
         val award = awardRepository.save(
             Awards(
                 goal = goal,

@@ -50,6 +50,10 @@ data class Goal(
         this.deleted = true
     }
 
+    fun moveToAward() {
+        this.awarded = true
+    }
+
     fun todoSucceed() {
         succeedTodoCount++
         levelTodoCount++
