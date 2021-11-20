@@ -37,7 +37,7 @@ class TodoService(
         return todoRepository.findAllByGoalAndCreatedAtBetween(goal, startDateTime, endDateTime).map { TodoInfoDto(it) }
     }
 
-    fun saveTodos(userId: Long, goalId: Long, todos: List<String>): List<TodoInfoDto> {
+    fun saveTodos(userId: Long, goalId: Long, todos: List<String>, date: LocalDate): List<TodoInfoDto> {
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
 
@@ -46,7 +46,7 @@ class TodoService(
         if (goal.deleted || goal.awarded)
             throw CannotAddTodoException()
 
-        todoRepository.saveAll(todos.map { Todo(goal = goal, name = it) })
+        todoRepository.saveAll(todos.map { Todo(goal = goal, user = user, name = it, todoDate = date) })
 
         return getTodos(user, goal, LocalDate.now())
     }

@@ -20,18 +20,9 @@ data class User(
     @Column(name = "nickname", nullable = false, length = 20, unique = false)
     var nickName: String,
 
-    @Column(name = "alarm_time")
-    var alarmTime: LocalTime? = null,
-
     @Column(name = "fcm_token")
     var fcmToken: String? = null
 ) : BaseTimeEntity() {
-
-    fun update(nickName: String, alarmTime: LocalTime) {
-        this.nickName = nickName
-        this.alarmTime = alarmTime
-    }
-
     fun registerFcmToken(token: String): String {
         fcmToken = token
         return fcmToken!!

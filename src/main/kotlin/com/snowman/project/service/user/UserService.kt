@@ -11,17 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class UserService(val userRepository: UserRepository) {
-
-    fun updateUserInfo(
-        id: Long,
-        dto: SimpleUserInfoDto
-    ): SimpleUserInfoDto {
-        val user = userRepository.findByIdOrNull(id) ?: throw UserNotExistException()
-        user.update(dto.nickName, dto.alarmTime)
-
-        return SimpleUserInfoDto(user.nickName, user.alarmTime!!)
-    }
-
     @Transactional(readOnly = true)
     fun getUserInfo(id: Long): DetailUserInfoDto {
         val user = userRepository.findByIdOrNull(id) ?: throw UserNotExistException()

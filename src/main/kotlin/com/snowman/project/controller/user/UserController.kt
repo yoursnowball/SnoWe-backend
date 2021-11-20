@@ -35,24 +35,6 @@ class UserController(
         )
     }
 
-    @ApiOperation("내 정보 수정")
-    @PutMapping
-    fun updateMyInfo(
-        @ApiIgnore
-        @Authenticated authInfo: AuthInfo,
-        @Valid @RequestBody reqUser: UpdateUserInfoRequest
-    ): UpdateUserInfoResponse {
-        return UpdateUserInfoResponse(
-            userService.updateUserInfo(
-                authInfo.id,
-                SimpleUserInfoDto(
-                    reqUser.nickName,
-                    reqUser.alarmTime
-                )
-            )
-        )
-    }
-
     @ApiOperation("Fcm token 저장 및 수정")
     @PostMapping
     fun registerFcmToken(

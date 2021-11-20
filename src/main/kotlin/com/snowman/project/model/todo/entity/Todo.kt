@@ -2,6 +2,7 @@ package com.snowman.project.model.todo.entity
 
 import com.snowman.project.model.common.BaseTimeEntity
 import com.snowman.project.model.goal.entity.Goal
+import com.snowman.project.model.user.entity.User
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -17,6 +18,10 @@ data class Todo(
     @JoinColumn(name = "goal_id")
     val goal: Goal,
 
+    @ManyToOne
+    @JoinColumn(name = "goal_id")
+    val user: User,
+
     @Column(name = "name", length = 20, nullable = false)
     var name: String,
 
@@ -24,7 +29,11 @@ data class Todo(
     var succeed: Boolean = false,
 
     @Column(name = "finished_at")
-    var finishedAt: LocalDateTime? = null
+    var finishedAt: LocalDateTime? = null,
+
+    @Column(name = "todo_date")
+    val todoDate: LocalDate
+
 
 ) : BaseTimeEntity() {
 
@@ -39,6 +48,6 @@ data class Todo(
     }
 
     fun canUpdateOrDelete(): Boolean {
-        return createdAt!!.toLocalDate().isEqual(LocalDate.now())
+        return todoDate.isEqual(LocalDate.now())
     }
 }
