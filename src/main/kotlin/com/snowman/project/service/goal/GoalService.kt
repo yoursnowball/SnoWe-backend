@@ -10,6 +10,7 @@ import com.snowman.project.model.goal.dto.DetailGoalInfoDto
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
 import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.goal.enums.CharacterType
+import com.snowman.project.service.goal.exceptions.AlreadyMaximumGoalsException
 import com.snowman.project.service.goal.exceptions.CannotDeleteGoalException
 import com.snowman.project.service.goal.exceptions.GoalNotExistException
 import com.snowman.project.service.todo.TodoService
@@ -71,6 +72,11 @@ class GoalService(
 
     fun saveGoal(userId: Long, name: String, objective: String, type: CharacterType): DetailGoalInfoDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
+        val myOwnGoals = goalRepository.countAllByUserAndDeletedIsFalse(user)
+
+        if (myOwnGoals >= 4)
+            throw AlreadyMaximumGoalsException()
+
         val goal = goalRepository.save(
             Goal(
                 name = name,

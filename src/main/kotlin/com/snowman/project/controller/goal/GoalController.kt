@@ -90,6 +90,7 @@ class GoalController(
     @DeleteMapping("/{goalId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteGoal(
+        @ApiIgnore
         @Authenticated authInfo: AuthInfo,
         @PathVariable goalId: Long
     ) {

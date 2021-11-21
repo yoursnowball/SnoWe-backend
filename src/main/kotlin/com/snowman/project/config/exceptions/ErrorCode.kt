@@ -19,6 +19,7 @@ enum class ErrorCode(
 
     GOAL_NOT_EXIST("GOAL-001", "목표를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     CANNOT_DELETE_GOAL("GOAL-002", "명예의전당에 등록된 목표는 삭제 할 수 없습니다.", HttpStatus.BAD_REQUEST),
+    ALREADY_MAXIMUM_GOALS("GOAL-003", "이미 최대치인 4개의 목표를 생성했습니다.", HttpStatus.BAD_REQUEST),
 
     TODO_NOT_EXIST("TODO-001", "투두를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     CANNOT_DELETE_SUCCEED_TODO("TODO-002", "성공상태인 투두는 삭제 할 수 없습니다.", HttpStatus.BAD_REQUEST),
