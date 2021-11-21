@@ -1,4 +1,4 @@
-# Snowman-Backend
+# SnoWe-Backend
 
 ```text
 [이응이응시옷]

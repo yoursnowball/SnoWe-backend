@@ -1,20 +1,21 @@
-package com.snowman.project.controller.awards.res
+package com.snowman.project.dao.awards.projections
 
-import com.snowman.project.dao.awards.projections.AwardInfoDto
+import com.querydsl.core.annotations.QueryProjection
+import com.snowman.project.model.awards.entity.Award
 import com.snowman.project.model.goal.enums.CharacterType
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 import java.time.LocalDateTime
 
 @ApiModel("명예의 전당 정보")
-class GetAwardResponse(
+data class AwardInfoDto @QueryProjection constructor(
     @ApiModelProperty("명예의 전당 식별자")
     val id: Long,
     @ApiModelProperty("명예의 전당에 등록된 목표 이름")
     val name: String,
     @ApiModelProperty("명예의 전당에 등록한 유저 이름")
     val userName: String,
-    @ApiModelProperty("명예의 전당에 등록된 목표 상세")
+    @ApiModelProperty("명예의 전당에등록된 목표 상세")
     val objective: String,
     @ApiModelProperty("명예의 전당에 등록된 날짜 (yyyy-MM-dd HH:mm:ss)")
     val awardAt: LocalDateTime,
@@ -29,16 +30,16 @@ class GetAwardResponse(
     @ApiModelProperty("레벨")
     val level: Int
 ) {
-    constructor(dto: AwardInfoDto) : this(
-        dto.id,
-        dto.name,
-        dto.userName,
-        dto.objective,
-        dto.awardAt,
-        dto.createdAt,
-        dto.succeedTodoCount,
-        dto.totalTodoCount,
-        dto.type,
-        dto.level
+    constructor(award: Award) : this(
+        award.id!!,
+        award.goal.name,
+        award.user.userName,
+        award.goal.objective,
+        award.createdAt!!,
+        award.goal.createdAt!!,
+        award.goal.succeedTodoCount,
+        award.totalTodoCount,
+        award.goal.characterType,
+        award.goal.level
     )
 }

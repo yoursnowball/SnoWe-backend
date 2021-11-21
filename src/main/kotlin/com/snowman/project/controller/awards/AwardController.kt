@@ -3,7 +3,7 @@ package com.snowman.project.controller.awards
 import com.snowman.project.config.security.AuthInfo
 import com.snowman.project.config.security.Authenticated
 import com.snowman.project.controller.awards.res.GetAwardsResponse
-import com.snowman.project.model.awards.dto.AwardInfoDto
+import com.snowman.project.dao.awards.projections.AwardInfoDto
 import com.snowman.project.service.awards.AwardService
 import com.snowman.project.utils.page.PageResponse
 import io.swagger.annotations.ApiOperation

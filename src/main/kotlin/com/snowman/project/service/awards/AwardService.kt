@@ -3,11 +3,11 @@ package com.snowman.project.service.awards
 import com.snowman.project.config.exceptions.common.DeletedContentException
 import com.snowman.project.config.exceptions.common.NotYourContentException
 import com.snowman.project.dao.awards.AwardRepository
+import com.snowman.project.dao.awards.projections.AwardInfoDto
 import com.snowman.project.dao.goal.GoalRepository
 import com.snowman.project.dao.todo.TodoRepository
 import com.snowman.project.dao.user.UserRepository
-import com.snowman.project.model.awards.dto.AwardInfoDto
-import com.snowman.project.model.awards.entity.Awards
+import com.snowman.project.model.awards.entity.Award
 import com.snowman.project.service.awards.exceptions.CannotMoveToAwardsException
 import com.snowman.project.service.goal.exceptions.GoalNotExistException
 import com.snowman.project.service.user.exceptions.UserNotExistException
@@ -30,13 +30,13 @@ class AwardService(
     @Transactional(readOnly = true)
     fun getMyAwards(userId: Long): List<AwardInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        return awardRepository.findByUser(user).map { AwardInfoDto(it) }
+        return awardRepository.findByUser(user)
     }
 
     @Transactional(readOnly = true)
     fun getAwardsByRanking(page: Int): Page<AwardInfoDto> {
-        return awardRepository.findAll(PageUtils.of(page, Sort.by("total_todo_count").descending()))
-            .map { AwardInfoDto(it) }
+        val pageable = PageUtils.of(page, Sort.by("succeed_todo_count"))
+        return awardRepository.getAwardsByRank(pageable)
     }
 
     fun saveAwards(userId: Long, goalId: Long): AwardInfoDto {
@@ -52,7 +52,7 @@ class AwardService(
 
         goal.moveToAward()
         val award = awardRepository.save(
-            Awards(
+            Award(
                 goal = goal,
                 totalTodoCount = todoRepository.countAllByGoal(goal),
                 user = user

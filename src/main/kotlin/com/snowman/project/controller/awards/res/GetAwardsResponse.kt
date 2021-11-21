@@ -1,6 +1,6 @@
 package com.snowman.project.controller.awards.res
 
-import com.snowman.project.model.awards.dto.AwardInfoDto
+import com.snowman.project.dao.awards.projections.AwardInfoDto
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 

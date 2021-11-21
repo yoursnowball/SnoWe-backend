@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "awards")
-data class Awards(
+data class Award(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -21,7 +21,7 @@ data class Awards(
     @Column(name = "total_todo_count")
     val totalTodoCount: Int,
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     val user: User
 
