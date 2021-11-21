@@ -66,7 +66,7 @@ class GoalController(
     fun moveToAwards(
         @ApiIgnore
         @Authenticated authInfo: AuthInfo,
-        @RequestParam goalId: Long
+        @PathVariable goalId: Long
     ): GetAwardResponse {
         val userId = authInfo.id
         return GetAwardResponse(awardService.saveAwards(userId, goalId))
