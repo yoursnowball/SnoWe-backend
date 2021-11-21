@@ -38,17 +38,18 @@ class PushService(
                 sendPushMessageDto = PushUtil.getCheerUpAlarm()
             }
         }
-        sendPushMessageDto?.let {
-            userList.forEach { user ->
-                pushRepository.save(
-                    PushMessage(
-                        user = user,
-                        title = it.title,
-                        body = it.body
+        sendPushMessageDto?.let { message ->
+            userList.filter { user -> user.fcmToken != null }
+                .forEach { filteredUser ->
+                    pushRepository.save(
+                        PushMessage(
+                            user = filteredUser,
+                            title = message.title,
+                            body = message.body
+                        )
                     )
-                )
-            }
-            sendIOS(tokenList, it)
+                }
+            sendIOS(tokenList, message)
         }
     }
 
@@ -63,9 +64,6 @@ class PushService(
                 }
                 PushType.LEVELUP -> {
                     sendPushMessageDto = PushUtil.levelUpAlarm(dto.name, dto.level)
-                }
-                PushType.WRITE -> {
-                    sendPushMessageDto = PushUtil.todoWriteAlarm()
                 }
             }
             sendPushMessageDto?.let {
