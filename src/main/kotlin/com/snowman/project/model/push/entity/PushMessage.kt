@@ -9,6 +9,7 @@ import javax.persistence.*
 @Table(name = "push_messages")
 data class PushMessage(
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     @ManyToOne

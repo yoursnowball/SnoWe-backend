@@ -33,7 +33,8 @@ enum class ErrorCode(
     CONSTRAINT_VIOLATION("SYSTEM-006", "잘못된 데이터 요청입니다.", HttpStatus.BAD_REQUEST),
     HTTP_MESSAGE_NOT_READABLE("SYSTEM-007", "데이터 요청을 읽을 수 없습니다.", HttpStatus.BAD_REQUEST),
 
-    CANNOT_MOVE_TO_AWARDS("AWARD-001", "명예의 전당으로 이동하기 충분한 레벨이 아닙니다.", HttpStatus.BAD_REQUEST)
+    CANNOT_MOVE_TO_AWARDS("AWARD-001", "명예의 전당으로 이동하기 충분한 레벨이 아닙니다.", HttpStatus.BAD_REQUEST),
 
+    ALARM_NOT_FOUND("ALARM-001", "푸시 알람을 찾을 수 없습니다.", HttpStatus.NOT_FOUND)
 
 }

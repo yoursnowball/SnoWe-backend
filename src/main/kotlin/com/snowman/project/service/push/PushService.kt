@@ -3,17 +3,28 @@ package com.snowman.project.service.push
 import com.google.firebase.messaging.*
 import com.snowman.project.dao.push.PushRepository
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
+import com.snowman.project.model.push.dto.PushHistoryDto
 import com.snowman.project.model.push.dto.SendPushMessageDto
 import com.snowman.project.model.push.entity.PushMessage
 import com.snowman.project.model.push.enums.PushType
 import com.snowman.project.model.user.entity.User
+import com.snowman.project.service.push.exceptions.AlarmNotFoundException
 import com.snowman.project.utils.push.PushUtil
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
 class PushService(
     val pushRepository: PushRepository
 ) {
+
+    fun readAlarm(alarmId: Long): PushHistoryDto {
+        val push = pushRepository.findByIdOrNull(alarmId) ?: throw AlarmNotFoundException()
+        push.readAlarm()
+
+        return PushHistoryDto(push)
+    }
+
     @Throws(FirebaseMessagingException::class)
     fun sendPushMessages(userList: List<User>, type: PushType) {
         val tokenList = userList.map { it.fcmToken }.filterNotNull()
