@@ -32,6 +32,7 @@ enum class ErrorCode(
     METHOD_ARGUMENT_TYPE_MISTMATCH("SYSTEM-005", "잘못된 파라미터 요청입니다.", HttpStatus.BAD_REQUEST),
     CONSTRAINT_VIOLATION("SYSTEM-006", "잘못된 데이터 요청입니다.", HttpStatus.BAD_REQUEST),
     HTTP_MESSAGE_NOT_READABLE("SYSTEM-007", "데이터 요청을 읽을 수 없습니다.", HttpStatus.BAD_REQUEST),
+    PUSH_MESSAGE_ERROR("SYSTEM-008", "푸시 알람 전송에 실패 했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
 
     CANNOT_MOVE_TO_AWARDS("AWARD-001", "명예의 전당으로 이동하기 충분한 레벨이 아닙니다.", HttpStatus.BAD_REQUEST),
 
