@@ -37,7 +37,7 @@ class UserController(
     }
 
     @ApiOperation("Fcm token 저장 및 수정")
-    @PostMapping
+    @PostMapping("/token")
     fun registerFcmToken(
         @ApiIgnore
         @Authenticated authInfo: AuthInfo,

@@ -27,7 +27,7 @@ class PushService(
 
     @Throws(FirebaseMessagingException::class)
     fun sendPushMessages(userList: List<User>, type: PushType) {
-        val tokenList = userList.map { it.fcmToken }.filterNotNull()
+        val tokenList = userList.mapNotNull { it.fcmToken }
         var sendPushMessageDto: SendPushMessageDto? = null
 
         when (type) {

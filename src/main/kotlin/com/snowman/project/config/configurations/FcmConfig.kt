@@ -9,26 +9,16 @@ import java.io.IOException
 import javax.annotation.PostConstruct
 
 @Configuration
-open class FcmConfig {
+class FcmConfig {
 
     @PostConstruct
     @Throws(IOException::class)
-    open fun initFcm() {
+    fun initFcm() {
         val serviceAccount = ClassPathResource("firebase/snowe-firebase-adminsdk.json").inputStream
-        var firebaseApp: FirebaseApp? = null
-        val firebaseApps = FirebaseApp.getApps()
 
-        if (firebaseApps != null && firebaseApps.isNotEmpty()) {
-            for (app: FirebaseApp in firebaseApps) {
-                if (app.name == FirebaseApp.DEFAULT_APP_NAME) {
-                    firebaseApp = app
-                }
-            }
-        } else {
-            val options: FirebaseOptions = FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .build()
-            FirebaseApp.initializeApp(options)
-        }
+        val options: FirebaseOptions = FirebaseOptions.Builder()
+            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+            .build()
+        FirebaseApp.initializeApp(options)
     }
 }
