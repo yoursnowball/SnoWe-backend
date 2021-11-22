@@ -42,14 +42,16 @@ class TodoController(
         @Valid @RequestBody req: UpdateTodoRequest
     ): GetTodoResponse {
         val userId = authInfo.id
+        val result = todoService.updateToDo(
+            userId = userId,
+            goalId = goalId,
+            todoId = todoId,
+            name = req.name,
+            succeed = req.succeed
+        )
         return GetTodoResponse(
-            todoService.updateToDo(
-                userId = userId,
-                goalId = goalId,
-                todoId = todoId,
-                name = req.name,
-                succeed = req.succeed
-            )
+            result.first,
+            result.second
         )
     }
 

@@ -53,41 +53,25 @@ class PushService(
         }
     }
 
-    @Throws(FirebaseMessagingException::class)
-    fun sendPushMessage(user: User, type: PushType, dto: SimpleGoalInfoDto) {
-        val token = user.fcmToken
-        token?.let {
-            var sendPushMessageDto: SendPushMessageDto? = null
-            when (type) {
-                PushType.ALLCLEAR -> {
-                    sendPushMessageDto = PushUtil.allClearAlarm(dto.objective)
-                }
-                PushType.LEVELUP -> {
-                    sendPushMessageDto = PushUtil.levelUpAlarm(dto.name, dto.level)
-                }
+    fun saveAlarmMessage(user: User, type: PushType, dto: SimpleGoalInfoDto) {
+        var sendPushMessageDto: SendPushMessageDto? = null
+        when (type) {
+            PushType.ALLCLEAR -> {
+                sendPushMessageDto = PushUtil.allClearAlarm(dto.objective)
             }
-            sendPushMessageDto?.let {
-                pushRepository.save(
-                    PushMessage(
-                        user = user,
-                        title = it.title,
-                        body = it.body
-                    )
-                )
-                sendIOS(token, sendPushMessageDto)
+            PushType.LEVELUP -> {
+                sendPushMessageDto = PushUtil.levelUpAlarm(dto.name, dto.level)
             }
         }
-    }
-
-    private fun sendIOS(token: String, sendPushMessageDto: SendPushMessageDto) {
-        val message = Message.builder()
-            .setNotification(Notification(sendPushMessageDto.title, sendPushMessageDto.body))
-            .putData("title", sendPushMessageDto.title)
-            .setToken(token)
-            .setApnsConfig(
-                ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).build()
-            ).build()
-        FirebaseMessaging.getInstance().send(message)
+        sendPushMessageDto?.let {
+            pushRepository.save(
+                PushMessage(
+                    user = user,
+                    title = it.title,
+                    body = it.body
+                )
+            )
+        }
     }
 
     private fun sendIOS(tokenList: List<String>, sendPushMessageDto: SendPushMessageDto): Int {
