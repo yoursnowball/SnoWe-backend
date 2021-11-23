@@ -38,7 +38,7 @@ class TodoService(
 
         if (goal.user != user)
             throw NotYourContentException()
-        return todoRepository.findAllByGoalAndCreatedAtBetween(goal, startDateTime, endDateTime).map { TodoInfoDto(it) }
+        return todoRepository.findAllByGoalAndTodoDateBetween(goal, startDateTime, endDateTime).map { TodoInfoDto(it) }
     }
 
     fun saveTodos(userId: Long, goalId: Long, todos: List<String>, date: LocalDate): List<TodoInfoDto> {
@@ -52,7 +52,7 @@ class TodoService(
 
         todoRepository.saveAll(todos.map { Todo(goal = goal, user = user, name = it, todoDate = date) })
 
-        return getTodos(user, goal, LocalDate.now())
+        return getTodos(user, goal, date)
     }
 
     fun updateToDo(
@@ -70,8 +70,8 @@ class TodoService(
         if (goal.user != user || todo.goal != goal)
             throw NotYourContentException()
 
-        if (!todo.canUpdateOrDelete())
-            throw CannotEditTodoException()
+        //if (!todo.canUpdateOrDelete())
+        //   throw CannotEditTodoException()
 
         if (todo.update(name, succeed)) {
             isLevelUp = goal.todoSucceed()
