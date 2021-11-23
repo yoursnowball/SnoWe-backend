@@ -33,12 +33,10 @@ class TodoService(
 
     @Transactional(readOnly = true)
     fun getTodos(user: User, goal: Goal, date: LocalDate): List<TodoInfoDto> {
-        val startDateTime = date.atTime(0, 0, 0, 0)
-        val endDateTime = date.atTime(23, 59, 59, 59)
 
         if (goal.user != user)
             throw NotYourContentException()
-        return todoRepository.findAllByGoalAndTodoDateBetween(goal, startDateTime, endDateTime).map { TodoInfoDto(it) }
+        return todoRepository.findAllByGoalAndTodoDate(goal, date).map { TodoInfoDto(it) }
     }
 
     fun saveTodos(userId: Long, goalId: Long, todos: List<String>, date: LocalDate): List<TodoInfoDto> {

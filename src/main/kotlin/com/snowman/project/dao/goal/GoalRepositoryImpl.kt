@@ -23,7 +23,7 @@ class GoalRepositoryImpl(
         endDate: LocalDate
     ): List<DailyGoalAndSucceedTodoNumDto> {
         val date = Expressions.stringTemplate(
-            "DATE_FORMAT({0}, {1})", todo.createdAt, "%Y-%m-%d"
+            "DATE_FORMAT({0}, {1})", todo.todoDate, "%Y-%m-%d"
         )
         return queryFactory
             .select(
