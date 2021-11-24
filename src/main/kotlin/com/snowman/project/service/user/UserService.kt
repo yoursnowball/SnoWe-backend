@@ -7,6 +7,8 @@ import com.snowman.project.model.push.enums.PushType
 import com.snowman.project.model.user.dto.DetailUserInfoDto
 import com.snowman.project.service.push.PushService
 import com.snowman.project.service.user.exceptions.UserNotExistException
+import com.snowman.project.utils.page.PageUtils
+import org.springframework.data.domain.Page
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -30,9 +32,9 @@ class UserService(
     }
 
     @Transactional(readOnly = true)
-    fun getAlarmHistory(userId: Long): List<PushHistoryDto> {
+    fun getAlarmHistory(userId: Long, page: Int): Page<PushHistoryDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        return  pushRepository.findAllByUser(user).map { PushHistoryDto(it) }
+        return pushRepository.findAllByUserOrderByCreatedAtDesc(user, PageUtils.of(page)).map { PushHistoryDto(it) }
     }
 
     fun testPush(userId: Long) {

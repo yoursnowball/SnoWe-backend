@@ -3,13 +3,14 @@ package com.snowman.project.controller.user
 import com.snowman.project.config.security.AuthInfo
 import com.snowman.project.config.security.Authenticated
 import com.snowman.project.controller.user.req.RegisterTokenRequest
-import com.snowman.project.controller.user.res.GetAlarmHistoriesResponse
 import com.snowman.project.controller.user.res.GetAlarmHistoryResponse
 import com.snowman.project.controller.user.res.GetUserInfoResponse
 import com.snowman.project.controller.user.res.RegisterFcmTokenResponse
+import com.snowman.project.model.push.dto.PushHistoryDto
 import com.snowman.project.service.goal.GoalService
 import com.snowman.project.service.push.PushService
 import com.snowman.project.service.user.UserService
+import com.snowman.project.utils.page.PageResponse
 import io.swagger.annotations.ApiOperation
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.annotations.ApiIgnore
@@ -51,11 +52,15 @@ class UserController(
     @GetMapping("/alarms")
     fun getAlarmHistory(
         @ApiIgnore
-        @Authenticated authInfo: AuthInfo
-    ): GetAlarmHistoriesResponse {
+        @Authenticated authInfo: AuthInfo,
+        @RequestParam page: Int
+    ): PageResponse<PushHistoryDto> {
         val userId = authInfo.id
-        return GetAlarmHistoriesResponse(
-            userService.getAlarmHistory(userId)
+        val result = userService.getAlarmHistory(userId, page)
+        return PageResponse(
+            result.content,
+            result.number,
+            result.isLast
         )
     }
 
