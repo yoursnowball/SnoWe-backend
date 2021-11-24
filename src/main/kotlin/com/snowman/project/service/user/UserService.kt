@@ -37,6 +37,11 @@ class UserService(
         return pushRepository.findAllByUserOrderByCreatedAtDesc(user, PageUtils.of(page)).map { PushHistoryDto(it) }
     }
 
+    fun deleteToken(userId: Long) {
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
+        user.deleteFcmToken()
+    }
+
     fun testPush(userId: Long) {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         pushService.sendPushMessages(listOf(user), PushType.CHEERUP)

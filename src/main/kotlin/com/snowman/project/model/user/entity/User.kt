@@ -1,7 +1,6 @@
 package com.snowman.project.model.user.entity
 
 import com.snowman.project.model.common.BaseTimeEntity
-import java.time.LocalTime
 import javax.persistence.*
 
 @Entity
@@ -26,5 +25,9 @@ data class User(
     fun registerFcmToken(token: String): String {
         fcmToken = token
         return fcmToken!!
+    }
+
+    fun deleteFcmToken() {
+        fcmToken = null
     }
 }

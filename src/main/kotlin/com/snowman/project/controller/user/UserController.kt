@@ -12,6 +12,7 @@ import com.snowman.project.service.push.PushService
 import com.snowman.project.service.user.UserService
 import com.snowman.project.utils.page.PageResponse
 import io.swagger.annotations.ApiOperation
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.annotations.ApiIgnore
 import javax.validation.Valid
@@ -24,6 +25,7 @@ class UserController(
     val pushService: PushService
 ) {
 
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation("내 정보 가져오기")
     @GetMapping
     fun getMyInfo(
@@ -37,6 +39,7 @@ class UserController(
         )
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Fcm token 저장 및 수정")
     @PostMapping("/token")
     fun registerFcmToken(
@@ -48,6 +51,19 @@ class UserController(
         return RegisterFcmTokenResponse(userService.registerFcmToken(userId, req.token))
     }
 
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Fcm token 삭제")
+    @DeleteMapping("/token")
+    fun deleteFcmToken(
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+    ) {
+        val userId = authInfo.id
+        userService.deleteToken(userId)
+    }
+
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation("알람 이력 가져오기")
     @GetMapping("/alarms")
     fun getAlarmHistory(

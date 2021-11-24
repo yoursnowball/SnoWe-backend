@@ -49,6 +49,7 @@ class GoalController(
 
     @ApiOperation("목표 생성하기")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     fun saveGoal(
         @ApiIgnore
         @Authenticated authInfo: AuthInfo,
@@ -63,6 +64,7 @@ class GoalController(
 
     @ApiOperation("목표 명예의 전당으로 보내기")
     @PostMapping("/{goalId}/awards")
+    @ResponseStatus(HttpStatus.OK)
     fun moveToAwards(
         @ApiIgnore
         @Authenticated authInfo: AuthInfo,
