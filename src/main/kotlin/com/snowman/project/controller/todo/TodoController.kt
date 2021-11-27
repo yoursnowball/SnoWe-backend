@@ -28,7 +28,7 @@ class TodoController(
         @RequestBody req: SaveTodoRequest
     ): GetTodosResponse {
         val userId = authInfo.id
-        return GetTodosResponse(todoService.saveTodos(userId, goalId, req.todos, req.date))
+        return GetTodosResponse(todoService.saveTodos(userId, goalId, req.todo, req.date))
     }
 
     @ApiOperation("투두 수정")

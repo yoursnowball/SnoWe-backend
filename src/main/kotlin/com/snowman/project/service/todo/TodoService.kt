@@ -39,7 +39,7 @@ class TodoService(
         return todoRepository.findAllByGoalAndTodoDate(goal, date).map { TodoInfoDto(it) }
     }
 
-    fun saveTodos(userId: Long, goalId: Long, todos: List<String>, date: LocalDate): List<TodoInfoDto> {
+    fun saveTodos(userId: Long, goalId: Long, todo: String, date: LocalDate): List<TodoInfoDto> {
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
 
@@ -48,7 +48,7 @@ class TodoService(
         if (goal.deleted || goal.awarded)
             throw CannotAddTodoException()
 
-        todoRepository.saveAll(todos.map { Todo(goal = goal, user = user, name = it, todoDate = date) })
+        todoRepository.save(Todo(goal = goal, user = user, name = todo, todoDate = date))
 
         return getTodos(user, goal, date)
     }

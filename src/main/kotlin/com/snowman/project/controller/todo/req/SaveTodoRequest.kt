@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty
 data class SaveTodoRequest(
     @ApiModelProperty("투두 리스트")
     @field:NotEmpty
-    val todos: List<String>,
+    val todo: String,
     val date: LocalDate
 ) {
 }
