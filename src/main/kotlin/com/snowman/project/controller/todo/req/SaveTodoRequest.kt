@@ -5,11 +5,13 @@ import io.swagger.annotations.ApiModelProperty
 import java.time.LocalDate
 import javax.validation.constraints.NotEmpty
 
-@ApiModel("투두리스트 저장 요청")
+@ApiModel("투두 저장 요청")
 data class SaveTodoRequest(
-    @ApiModelProperty("투두 리스트")
-    @field:NotEmpty
+    @ApiModelProperty("투두")
     val todo: String,
+
+    @field:NotEmpty
+    @ApiModelProperty("투두 시점")
     val date: LocalDate
 ) {
 }
