@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 
 interface GoalRepository : JpaRepository<Goal, Long>, GoalRepositoryCustom {
-    fun findAllByUserAndDeletedIsFalse(user: User): List<Goal>
+    fun findAllByUserAndDeletedIsFalseAndAwardedIsFalse(user: User): List<Goal>
     fun countAllByUserAndDeletedIsFalse(user: User): Int
 }

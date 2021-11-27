@@ -66,7 +66,7 @@ class GoalService(
     @Transactional(readOnly = true)
     fun getMyGoals(userId: Long): List<DetailGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        return goalRepository.findAllByUserAndDeletedIsFalse(user)
+        return goalRepository.findAllByUserAndDeletedIsFalseAndAwardedIsFalse(user)
             .map { DetailGoalInfoDto(it, todoService.getTodos(user, it, LocalDate.now())) }
     }
 
