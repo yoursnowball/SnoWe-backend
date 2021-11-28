@@ -125,7 +125,7 @@ class GoalService(
      */
     fun saveGoal(userId: Long, name: String, objective: String, type: CharacterType): DetailGoalInfoDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        val myOwnGoals = goalRepository.countAllByUserAndDeletedIsFalse(user)
+        val myOwnGoals = goalRepository.countAllByUserAndDeletedIsFalseAndAwardedIsFalse(user)
 
         if (myOwnGoals >= 4)
             throw AlreadyMaximumGoalsException()
