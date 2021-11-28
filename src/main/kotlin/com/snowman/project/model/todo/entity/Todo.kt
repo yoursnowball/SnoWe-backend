@@ -39,9 +39,20 @@ data class Todo(
 
     fun update(name: String, succeed: Boolean): Boolean {
         this.name = name
+        /**
+         * UnCheck -> Check
+         */
         if (!this.succeed && succeed) {
             this.succeed = succeed
             this.finishedAt = LocalDateTime.now()
+            return true
+        }
+        /**
+         * Check -> Uncheck
+         */
+        else if (this.succeed && !succeed) {
+            this.succeed = succeed
+            this.finishedAt = null
             return true
         }
         return false
