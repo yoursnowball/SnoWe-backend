@@ -7,6 +7,7 @@ import com.snowman.project.dao.goal.GoalRepository
 import com.snowman.project.dao.goal.projections.DailyGoalAndSucceedTodoNumDto
 import com.snowman.project.dao.todo.projections.TodoWIthGoalIdDto
 import com.snowman.project.dao.user.UserRepository
+import com.snowman.project.model.goal.dto.DailyGoalInfoDto
 import com.snowman.project.model.goal.dto.DetailGoalInfoDto
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
 import com.snowman.project.model.goal.entity.Goal
@@ -33,17 +34,25 @@ class GoalService(
      * 삭제, 명예의전당에간 목표도 보여주는 히스토리성 데이터
      */
     @Transactional(readOnly = true)
-    fun getMyDailyGoalsHistory(userId: Long, date: LocalDate): List<DetailGoalInfoDto> {
+    fun getMyDailyGoalsHistory(userId: Long, date: LocalDate): List<DailyGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val todos: Map<Long, List<TodoWIthGoalIdDto>> = todoService.getTodosByDate(user, date)
-        val goalWithTodos: MutableList<DetailGoalInfoDto> = mutableListOf()
+        val goalWithTodos: MutableList<DailyGoalInfoDto> = mutableListOf()
 
         for (goalId in todos.keys) {
-            goalRepository.findByIdOrNull(goalId)?.let {
+            goalRepository.findByIdOrNull(goalId)?.let { goal ->
+                val dailyTodos = todos[goalId]!!
                 goalWithTodos.add(
-                    DetailGoalInfoDto(
-                        goal = it,
-                        todos = todos[goalId]!!.map { todo ->
+                    DailyGoalInfoDto(
+                        id = goal.id!!,
+                        name = goal.name,
+                        objective = goal.objective,
+                        createdAt = goal.createdAt!!,
+                        level = goal.level,
+                        type = goal.characterType,
+                        todaySucceedTodoCount = dailyTodos.filter { it.finishedAt != null }.count(),
+                        todayTotalTodoCount = dailyTodos.size,
+                        todos = dailyTodos.map { todo ->
                             TodoInfoDto(
                                 id = todo.todoId,
                                 name = todo.name,

@@ -1,4 +1,4 @@
-package com.snowman.project.controller.goal.req.body
+package com.snowman.project.controller.goal.req
 
 import com.snowman.project.model.goal.enums.CharacterType
 import io.swagger.annotations.ApiModel

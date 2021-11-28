@@ -3,10 +3,10 @@ package com.snowman.project.controller.goal
 import com.snowman.project.config.security.AuthInfo
 import com.snowman.project.config.security.Authenticated
 import com.snowman.project.controller.awards.res.GetAwardResponse
-import com.snowman.project.controller.goal.req.body.SaveGoalRequest
-import com.snowman.project.controller.goal.res.GetDetailGoalsResponse
-import com.snowman.project.controller.goal.res.GetGoalResponse
-import com.snowman.project.controller.goal.res.GetSimpleGoalsResponse
+import com.snowman.project.controller.goal.req.SaveGoalRequest
+import com.snowman.project.controller.goal.res.GetDailyGoalsResponse
+import com.snowman.project.controller.goal.res.GetGoalInfoResponse
+import com.snowman.project.controller.goal.res.GetGoalsInfoResponse
 import com.snowman.project.service.awards.AwardService
 import com.snowman.project.service.goal.GoalService
 import io.swagger.annotations.ApiOperation
@@ -25,7 +25,7 @@ class GoalController(
 ) {
 
     @ApiOperation("해당 날짜의 나의 목표와 투두리스트 리턴")
-    @GetMapping("/goals")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun getGoals(
         @ApiIgnore
@@ -33,9 +33,9 @@ class GoalController(
         @RequestParam(required = true)
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         date: LocalDate
-    ): GetDetailGoalsResponse {
+    ): GetDailyGoalsResponse {
         val userId = authInfo.id
-        return GetDetailGoalsResponse(
+        return GetDailyGoalsResponse(
             goalService.getMyDailyGoalsHistory(userId, date)
         )
     }
@@ -53,9 +53,9 @@ class GoalController(
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         end: LocalDate
 
-    ): GetSimpleGoalsResponse {
+    ): GetGoalsInfoResponse {
         val userId = authInfo.id
-        return GetSimpleGoalsResponse(
+        return GetGoalsInfoResponse(
             goalService.getBestDailyGoalByDates(
                 userId,
                 start,
@@ -71,10 +71,10 @@ class GoalController(
         @ApiIgnore
         @Authenticated authInfo: AuthInfo,
         @Valid @RequestBody req: SaveGoalRequest
-    ): GetGoalResponse {
+    ): GetGoalInfoResponse {
         val userId = authInfo.id
 
-        return GetGoalResponse(
+        return GetGoalInfoResponse(
             goalService.saveGoal(userId, req.name, req.objective, req.type),
         )
     }
@@ -99,10 +99,10 @@ class GoalController(
         @Authenticated authInfo: AuthInfo,
         @PathVariable goalId: Long,
         @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") date: LocalDate?
-    ): GetGoalResponse {
+    ): GetGoalInfoResponse {
         val userId = authInfo.id
         val targetDate = date ?: LocalDate.now()
-        return GetGoalResponse(goalService.getMyGoal(userId, goalId, targetDate))
+        return GetGoalInfoResponse(goalService.getMyGoal(userId, goalId, targetDate))
     }
 
     @ApiOperation("목표 삭제")

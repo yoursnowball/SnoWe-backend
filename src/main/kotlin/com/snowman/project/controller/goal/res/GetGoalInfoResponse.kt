@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty
 import java.time.LocalDateTime
 
 @ApiModel("목표 상세")
-class GetGoalResponse(
+class GetGoalInfoResponse(
     @ApiModelProperty("목표 식별자")
     val id: Long,
     @ApiModelProperty("목표 이름")

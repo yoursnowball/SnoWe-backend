@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 
 @ApiModel("목표 리스트")
-class GetSimpleGoalsResponse(
+class GetGoalsInfoResponse(
     @ApiModelProperty("목표 리스트")
     val goals: Map<String, SimpleGoalInfoDto>
 ) {
