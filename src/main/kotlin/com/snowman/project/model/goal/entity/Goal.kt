@@ -4,6 +4,7 @@ import com.snowman.project.model.common.BaseTimeEntity
 import com.snowman.project.model.goal.enums.CharacterType
 import com.snowman.project.model.goal.enums.LevelChange
 import com.snowman.project.model.user.entity.User
+import java.time.LocalDateTime
 import javax.persistence.*
 import kotlin.math.pow
 
@@ -37,6 +38,9 @@ data class Goal(
 
     @Enumerated(EnumType.STRING)
     val characterType: CharacterType,
+
+    @Column(name = "finished_at")
+    var finishedAt: LocalDateTime? = null,
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
