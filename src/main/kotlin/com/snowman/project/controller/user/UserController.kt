@@ -35,7 +35,7 @@ class UserController(
         val userId = authInfo.id
         return GetUserInfoResponse(
             userService.getUserInfo(userId),
-            goalService.getMyGoals(userId)
+            goalService.getMyTodayActiveGoals(userId)
         )
     }
 

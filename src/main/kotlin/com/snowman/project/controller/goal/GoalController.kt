@@ -4,8 +4,9 @@ import com.snowman.project.config.security.AuthInfo
 import com.snowman.project.config.security.Authenticated
 import com.snowman.project.controller.awards.res.GetAwardResponse
 import com.snowman.project.controller.goal.req.body.SaveGoalRequest
+import com.snowman.project.controller.goal.res.GetDetailGoalsResponse
 import com.snowman.project.controller.goal.res.GetGoalResponse
-import com.snowman.project.controller.goal.res.GetGoalsResponse
+import com.snowman.project.controller.goal.res.GetSimpleGoalsResponse
 import com.snowman.project.service.awards.AwardService
 import com.snowman.project.service.goal.GoalService
 import io.swagger.annotations.ApiOperation
@@ -23,10 +24,26 @@ class GoalController(
     val awardService: AwardService
 ) {
 
+    @ApiOperation("해당 날짜의 나의 목표와 투두리스트 리턴")
+    @GetMapping("/goals")
+    @ResponseStatus(HttpStatus.OK)
+    fun getGoals(
+        @ApiIgnore
+        @Authenticated authInfo: AuthInfo,
+        @RequestParam(required = true)
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        date: LocalDate
+    ): GetDetailGoalsResponse {
+        val userId = authInfo.id
+        return GetDetailGoalsResponse(
+            goalService.getMyDailyGoalsHistory(userId, date)
+        )
+    }
+
     @ApiOperation("기간내에 제일 많이 수행한 목표 리스트 리턴")
     @GetMapping("/calendar")
     @ResponseStatus(HttpStatus.OK)
-    fun getGoals(
+    fun getBestDailyGoals(
         @ApiIgnore
         @Authenticated authInfo: AuthInfo,
         @RequestParam(required = true)
@@ -36,10 +53,10 @@ class GoalController(
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         end: LocalDate
 
-    ): GetGoalsResponse {
+    ): GetSimpleGoalsResponse {
         val userId = authInfo.id
-        return GetGoalsResponse(
-            goalService.getBestDailyGoalsByDates(
+        return GetSimpleGoalsResponse(
+            goalService.getBestDailyGoalByDates(
                 userId,
                 start,
                 end

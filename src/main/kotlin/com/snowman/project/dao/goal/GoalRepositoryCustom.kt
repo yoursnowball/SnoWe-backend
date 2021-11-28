@@ -5,5 +5,9 @@ import com.snowman.project.model.user.entity.User
 import java.time.LocalDate
 
 interface GoalRepositoryCustom {
-    fun getDailyGoalsWithSucceedTodoCountByDateBetween(user: User, startDate: LocalDate, endDate: LocalDate): List<DailyGoalAndSucceedTodoNumDto>
+    fun getDailyGoalsWithSucceedTodoCountByDateBetween(
+        user: User,
+        startDate: LocalDate,
+        endDate: LocalDate
+    ): List<DailyGoalAndSucceedTodoNumDto>
 }

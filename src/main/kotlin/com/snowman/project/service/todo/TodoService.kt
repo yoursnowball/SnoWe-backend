@@ -3,6 +3,7 @@ package com.snowman.project.service.todo
 import com.snowman.project.config.exceptions.common.NotYourContentException
 import com.snowman.project.dao.goal.GoalRepository
 import com.snowman.project.dao.todo.TodoRepository
+import com.snowman.project.dao.todo.projections.TodoWIthGoalIdDto
 import com.snowman.project.dao.user.UserRepository
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
 import com.snowman.project.model.goal.entity.Goal
@@ -32,7 +33,12 @@ class TodoService(
 ) {
 
     @Transactional(readOnly = true)
-    fun getTodos(user: User, goal: Goal, date: LocalDate): List<TodoInfoDto> {
+    fun getTodosByDate(user: User, date: LocalDate): Map<Long, List<TodoWIthGoalIdDto>> {
+        return todoRepository.getTodosWithGoalByUserAndDate(user, date).groupBy { it.goalId }
+    }
+
+    @Transactional(readOnly = true)
+    fun getTodosByGoalAndDate(user: User, goal: Goal, date: LocalDate): List<TodoInfoDto> {
 
         if (goal.user != user)
             throw NotYourContentException()
@@ -50,7 +56,7 @@ class TodoService(
 
         todoRepository.save(Todo(goal = goal, user = user, name = todo, todoDate = date))
 
-        return getTodos(user, goal, date)
+        return getTodosByGoalAndDate(user, goal, date)
     }
 
     fun updateToDo(

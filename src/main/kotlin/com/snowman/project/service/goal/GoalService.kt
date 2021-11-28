@@ -5,11 +5,13 @@ import com.snowman.project.config.exceptions.common.DeletedContentException
 import com.snowman.project.config.exceptions.common.NotYourContentException
 import com.snowman.project.dao.goal.GoalRepository
 import com.snowman.project.dao.goal.projections.DailyGoalAndSucceedTodoNumDto
+import com.snowman.project.dao.todo.projections.TodoWIthGoalIdDto
 import com.snowman.project.dao.user.UserRepository
 import com.snowman.project.model.goal.dto.DetailGoalInfoDto
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
 import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.goal.enums.CharacterType
+import com.snowman.project.model.todo.dto.TodoInfoDto
 import com.snowman.project.service.goal.exceptions.AlreadyMaximumGoalsException
 import com.snowman.project.service.goal.exceptions.CannotDeleteGoalException
 import com.snowman.project.service.goal.exceptions.GoalNotExistException
@@ -27,9 +29,42 @@ class GoalService(
     private val userRepository: UserRepository,
     private val todoService: TodoService
 ) {
-
+    /**
+     * 삭제, 명예의전당에간 목표도 보여주는 히스토리성 데이터
+     */
     @Transactional(readOnly = true)
-    fun getBestDailyGoalsByDates(
+    fun getMyDailyGoalsHistory(userId: Long, date: LocalDate): List<DetailGoalInfoDto> {
+        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
+        val todos: Map<Long, List<TodoWIthGoalIdDto>> = todoService.getTodosByDate(user, date)
+        val goalWithTodos: MutableList<DetailGoalInfoDto> = mutableListOf()
+
+        for (goalId in todos.keys) {
+            goalRepository.findByIdOrNull(goalId)?.let {
+                goalWithTodos.add(
+                    DetailGoalInfoDto(
+                        goal = it,
+                        todos = todos[goalId]!!.map { todo ->
+                            TodoInfoDto(
+                                id = todo.todoId,
+                                name = todo.name,
+                                succeed = todo.succeed,
+                                createdAt = todo.createdAt,
+                                finishedAt = todo.finishedAt,
+                                todoDate = todo.todoDate
+                            )
+                        }
+                    )
+                )
+            }
+        }
+        return goalWithTodos
+    }
+
+    /**
+     * 입력받은 날짜의 기간동안 매일매일 가장많이 수행한 목표 리턴
+     */
+    @Transactional(readOnly = true)
+    fun getBestDailyGoalByDates(
         userId: Long,
         startDate: LocalDate,
         endDate: LocalDate
@@ -50,6 +85,9 @@ class GoalService(
         return dailyMap
     }
 
+    /**
+     * GoalId와 날짜를 통해서 목표 상세와  투두리스트 리턴
+     */
     @Transactional(readOnly = true)
     fun getMyGoal(userId: Long, goalId: Long, date: LocalDate): DetailGoalInfoDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
@@ -60,16 +98,22 @@ class GoalService(
         if (goal.deleted)
             throw DeletedContentException()
 
-        return DetailGoalInfoDto(goal, todoService.getTodos(user, goal, date))
+        return DetailGoalInfoDto(goal, todoService.getTodosByGoalAndDate(user, goal, date))
     }
 
+    /**
+     * 명예의전당에 가거나 삭제되지 않은 오늘의 현재 진행중인 목표와 투두리스트 리턴
+     */
     @Transactional(readOnly = true)
-    fun getMyGoals(userId: Long): List<DetailGoalInfoDto> {
+    fun getMyTodayActiveGoals(userId: Long): List<DetailGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         return goalRepository.findAllByUserAndDeletedIsFalseAndAwardedIsFalse(user)
-            .map { DetailGoalInfoDto(it, todoService.getTodos(user, it, LocalDate.now())) }
+            .map { DetailGoalInfoDto(it, todoService.getTodosByGoalAndDate(user, it, LocalDate.now())) }
     }
 
+    /**
+     * 목표 저장
+     */
     fun saveGoal(userId: Long, name: String, objective: String, type: CharacterType): DetailGoalInfoDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val myOwnGoals = goalRepository.countAllByUserAndDeletedIsFalse(user)
@@ -88,6 +132,9 @@ class GoalService(
         return DetailGoalInfoDto(goal, listOf())
     }
 
+    /**
+     * 목표 삭제(flag)
+     */
     fun deleteGoal(userId: Long, goalId: Long) {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
