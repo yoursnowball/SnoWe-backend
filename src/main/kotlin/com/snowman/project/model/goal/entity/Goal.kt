@@ -53,10 +53,12 @@ data class Goal(
 
     fun delete() {
         this.deleted = true
+        this.finishedAt = LocalDateTime.now()
     }
 
     fun moveToAward() {
         this.awarded = true
+        this.finishedAt = LocalDateTime.now()
     }
 
     fun todoChange(flag: Boolean): LevelChange {
