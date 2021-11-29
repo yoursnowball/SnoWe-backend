@@ -5,6 +5,7 @@ import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.snowman.project.dao.goal.projections.DailyGoalAndSucceedTodoNumDto
 import com.snowman.project.dao.goal.projections.QDailyGoalAndSucceedTodoNumDto
+import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.goal.entity.QGoal.goal
 import com.snowman.project.model.todo.entity.QTodo.todo
 import com.snowman.project.model.user.entity.User
@@ -41,7 +42,7 @@ class GoalRepositoryImpl(
             )
             .from(goal)
             .join(todo).on(todo.goal.eq(goal), todo.succeed.isTrue)
-            .where(dateBetween(startDate, endDate))
+            .where(createdAtDateBetween(startDate, endDate))
             .groupBy(
                 date,
                 goal.id
@@ -51,10 +52,28 @@ class GoalRepositoryImpl(
 
     }
 
-    private fun dateBetween(startDate: LocalDate, endDate: LocalDate): BooleanExpression {
-        val startDateTime = startDate.atTime(0, 0, 0, 0)
+    override fun getActiveGoalsByDate(date: LocalDate): List<Goal> {
+        return queryFactory.selectFrom(goal)
+            .where(isActiveWhenFinishedAtIsNull(date), isActiveWhenFinishedAtIsNotNull(date))
+            .fetch()
+    }
+
+    private fun createdAtDateBetween(startDate: LocalDate, endDate: LocalDate): BooleanExpression {
+        val startDateTime = startDate.atStartOfDay()
         val endDateTime = endDate.atTime(23, 59, 59, 59)
 
         return todo.createdAt.between(startDateTime, endDateTime)
+    }
+
+    private fun isActiveWhenFinishedAtIsNull(date: LocalDate): BooleanExpression {
+        return goal.finishedAt.isNull.and(goal.createdAt.before(date.atTime(23, 59, 59, 59)))
+    }
+
+    private fun isActiveWhenFinishedAtIsNotNull(date: LocalDate): BooleanExpression {
+        val createDateTime = date.plusDays(1).atStartOfDay()
+        val endDateTime = date.atStartOfDay()
+        return goal.finishedAt.isNotNull.and(
+            goal.createdAt.before(createDateTime).and(goal.finishedAt.after(endDateTime))
+        )
     }
 }

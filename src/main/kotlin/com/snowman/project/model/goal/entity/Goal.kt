@@ -36,6 +36,9 @@ data class Goal(
     @Column(name = "is_award")
     var awarded: Boolean = false,
 
+    @Column(name = "finished_at")
+    var finishedAt: LocalDateTime? = null,
+
     @Enumerated(EnumType.STRING)
     val characterType: CharacterType,
 
