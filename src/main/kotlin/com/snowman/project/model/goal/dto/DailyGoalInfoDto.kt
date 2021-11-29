@@ -1,5 +1,6 @@
 package com.snowman.project.model.goal.dto
 
+import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.goal.enums.CharacterType
 import com.snowman.project.model.todo.dto.TodoInfoDto
 import io.swagger.annotations.ApiModelProperty

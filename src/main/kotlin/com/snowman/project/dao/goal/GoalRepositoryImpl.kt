@@ -52,9 +52,9 @@ class GoalRepositoryImpl(
 
     }
 
-    override fun getActiveGoalsByDate(date: LocalDate): List<Goal> {
+    override fun getActiveGoalsByDateAndUser(user: User, date: LocalDate): List<Goal> {
         return queryFactory.selectFrom(goal)
-            .where(isActiveWhenFinishedAtIsNull(date), isActiveWhenFinishedAtIsNotNull(date))
+            .where((isActiveWhenFinishedAtIsNull(date).or(isActiveWhenFinishedAtIsNotNull(date))), goal.user.eq(user))
             .fetch()
     }
 

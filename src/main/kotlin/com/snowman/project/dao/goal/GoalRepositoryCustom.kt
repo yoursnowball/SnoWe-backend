@@ -12,5 +12,5 @@ interface GoalRepositoryCustom {
         endDate: LocalDate
     ): List<DailyGoalAndSucceedTodoNumDto>
 
-    fun getActiveGoalsByDate(date:LocalDate): List<Goal>
+    fun getActiveGoalsByDateAndUser(user: User, date: LocalDate): List<Goal>
 }

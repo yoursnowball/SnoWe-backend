@@ -5,7 +5,6 @@ import com.snowman.project.config.exceptions.common.DeletedContentException
 import com.snowman.project.config.exceptions.common.NotYourContentException
 import com.snowman.project.dao.goal.GoalRepository
 import com.snowman.project.dao.goal.projections.DailyGoalAndSucceedTodoNumDto
-import com.snowman.project.dao.todo.projections.TodoWIthGoalIdDto
 import com.snowman.project.dao.user.UserRepository
 import com.snowman.project.model.goal.dto.DailyGoalInfoDto
 import com.snowman.project.model.goal.dto.DetailGoalInfoDto
@@ -31,42 +30,27 @@ class GoalService(
     private val todoService: TodoService
 ) {
     /**
-     * 삭제, 명예의전당에간 목표도 보여주는 히스토리성 데이터
+     * 삭제,명예의전당에 간 목표도 보여주는 히스토리성 데이터
      */
     @Transactional(readOnly = true)
     fun getMyDailyGoalsHistory(userId: Long, date: LocalDate): List<DailyGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        val todos: Map<Long, List<TodoWIthGoalIdDto>> = todoService.getTodosByDate(user, date)
-        val goalWithTodos: MutableList<DailyGoalInfoDto> = mutableListOf()
+        val activeGoalsInThatTime = goalRepository.getActiveGoalsByDateAndUser(user, date)
 
-        for (goalId in todos.keys) {
-            goalRepository.findByIdOrNull(goalId)?.let { goal ->
-                val dailyTodos = todos[goalId]!!
-                goalWithTodos.add(
-                    DailyGoalInfoDto(
-                        id = goal.id!!,
-                        name = goal.name,
-                        objective = goal.objective,
-                        createdAt = goal.createdAt!!,
-                        level = goal.level,
-                        type = goal.characterType,
-                        todaySucceedTodoCount = dailyTodos.filter { it.finishedAt != null }.count(),
-                        todayTotalTodoCount = dailyTodos.size,
-                        todos = dailyTodos.map { todo ->
-                            TodoInfoDto(
-                                id = todo.todoId,
-                                name = todo.name,
-                                succeed = todo.succeed,
-                                createdAt = todo.createdAt,
-                                finishedAt = todo.finishedAt,
-                                todoDate = todo.todoDate
-                            )
-                        }
-                    )
-                )
-            }
+        return activeGoalsInThatTime.map { goal ->
+            val todos = todoService.getTodosByGoalAndDate(user, goal, date)
+            DailyGoalInfoDto(
+                id = goal.id!!,
+                name = goal.name,
+                objective = goal.objective,
+                createdAt = goal.createdAt!!,
+                level = goal.level,
+                todaySucceedTodoCount = todos.filter { todo -> todo.succeed }.size,
+                todayTotalTodoCount = todos.size,
+                type = goal.characterType,
+                todos = todos
+            )
         }
-        return goalWithTodos
     }
 
     /**

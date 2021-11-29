@@ -42,9 +42,6 @@ data class Goal(
     @Enumerated(EnumType.STRING)
     val characterType: CharacterType,
 
-    @Column(name = "finished_at")
-    var finishedAt: LocalDateTime? = null,
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     val user: User
