@@ -8,6 +8,7 @@ import com.snowman.project.dao.goal.projections.QDailyGoalAndSucceedTodoNumDto
 import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.goal.entity.QGoal.goal
 import com.snowman.project.model.todo.entity.QTodo.todo
+import com.snowman.project.model.user.entity.QUser.user
 import com.snowman.project.model.user.entity.User
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
@@ -42,7 +43,7 @@ class GoalRepositoryImpl(
             )
             .from(goal)
             .join(todo).on(todo.goal.eq(goal), todo.succeed.isTrue)
-            .where(createdAtDateBetween(startDate, endDate))
+            .where(createdAtDateBetween(startDate, endDate), goal.user.eq(user))
             .groupBy(
                 date,
                 goal.id

@@ -7,13 +7,16 @@ import com.snowman.project.controller.user.res.GetAlarmHistoryResponse
 import com.snowman.project.controller.user.res.GetUserInfoResponse
 import com.snowman.project.controller.user.res.RegisterFcmTokenResponse
 import com.snowman.project.model.push.dto.PushHistoryDto
+import com.snowman.project.model.push.enums.PushType
 import com.snowman.project.service.goal.GoalService
 import com.snowman.project.service.push.PushService
 import com.snowman.project.service.user.UserService
 import com.snowman.project.utils.page.PageResponse
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 import springfox.documentation.annotations.ApiIgnore
 import javax.validation.Valid
 
@@ -96,8 +99,10 @@ class UserController(
     @GetMapping("/push-test")
     fun pushTest(
         @ApiIgnore
-        @Authenticated authInfo: AuthInfo
+        @Authenticated authInfo: AuthInfo,
+        @RequestParam(required = true)
+        type: PushType
     ) {
-        userService.testPush(authInfo.id)
+        userService.testPush(authInfo.id, type)
     }
 }

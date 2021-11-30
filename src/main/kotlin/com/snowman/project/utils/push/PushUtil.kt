@@ -32,5 +32,12 @@ class PushUtil {
                 body = "[$objective] 투두를 모두 완료하셨군요! \n 너무 수고했어요" + String(Character.toChars(0x1F44F))
             )
         }
+
+        fun dailyMorningAlarm(): SendPushMessageDto {
+            return SendPushMessageDto(
+                title = "좋은 아침이에요!",
+                body = "오늘도 활기찬 하루를 보내봐요!" + String(Character.toChars(0x2600))
+            )
+        }
     }
 }
