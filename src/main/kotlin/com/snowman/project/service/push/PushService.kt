@@ -37,6 +37,9 @@ class PushService(
             PushType.CHEERUP -> {
                 sendPushMessageDto = PushUtil.getCheerUpAlarm()
             }
+            PushType.DAILY -> {
+                sendPushMessageDto = PushUtil.dailyMorningAlarm()
+            }
         }
         sendPushMessageDto?.let { message ->
             userList.filter { user -> user.fcmToken != null }
