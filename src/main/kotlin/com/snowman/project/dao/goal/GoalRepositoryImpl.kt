@@ -8,7 +8,6 @@ import com.snowman.project.dao.goal.projections.QDailyGoalAndSucceedTodoNumDto
 import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.goal.entity.QGoal.goal
 import com.snowman.project.model.todo.entity.QTodo.todo
-import com.snowman.project.model.user.entity.QUser.user
 import com.snowman.project.model.user.entity.User
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
@@ -43,7 +42,7 @@ class GoalRepositoryImpl(
             )
             .from(goal)
             .join(todo).on(todo.goal.eq(goal), todo.succeed.isTrue)
-            .where(createdAtDateBetween(startDate, endDate), goal.user.eq(user))
+            .where(todoDateBetween(startDate, endDate), goal.user.eq(user))
             .groupBy(
                 date,
                 goal.id
@@ -59,11 +58,8 @@ class GoalRepositoryImpl(
             .fetch()
     }
 
-    private fun createdAtDateBetween(startDate: LocalDate, endDate: LocalDate): BooleanExpression {
-        val startDateTime = startDate.atStartOfDay()
-        val endDateTime = endDate.atTime(23, 59, 59, 59)
-
-        return todo.createdAt.between(startDateTime, endDateTime)
+    private fun todoDateBetween(startDate: LocalDate, endDate: LocalDate): BooleanExpression {
+        return todo.todoDate.between(startDate,endDate)
     }
 
     private fun isActiveWhenFinishedAtIsNull(date: LocalDate): BooleanExpression {
