@@ -4,7 +4,7 @@ import com.snowman.project.model.common.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",indexes = [Index(columnList = "fcm_token")])
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

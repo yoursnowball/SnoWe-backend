@@ -42,9 +42,9 @@ class UserService(
         user.deleteFcmToken()
     }
 
-    fun testPush(userId: Long) {
+    fun testPush(userId: Long,type:PushType) {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        pushService.sendPushMessages(listOf(user), PushType.CHEERUP)
+        pushService.sendPushMessages(listOf(user), type)
 
     }
 }
