@@ -75,8 +75,8 @@ class TodoService(
         if (goal.user != user || todo.goal != goal)
             throw NotYourContentException()
 
-        //if (!todo.canUpdateOrDelete())
-        //   throw CannotEditTodoException()
+        if (!todo.canUpdateOrDelete())
+            throw CannotEditTodoException()
 
         if (todo.update(name, succeed)) {
             isLevelChange = goal.todoChange(succeed)
