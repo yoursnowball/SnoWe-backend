@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
+import org.springframework.core.io.PathResource
 import java.io.IOException
 import javax.annotation.PostConstruct
 
@@ -14,7 +15,7 @@ class FcmConfig {
     @PostConstruct
     @Throws(IOException::class)
     fun initFcm() {
-        val serviceAccount = ClassPathResource("firebase/snowe-firebase-adminsdk.json").inputStream
+        val serviceAccount = PathResource("Snowe-bakend-private-file/firebase/snowe-firebase-adminsdk.json").inputStream
 
         val options: FirebaseOptions = FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
