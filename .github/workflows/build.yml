@@ -25,8 +25,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Grant execute permission for gradlew
-          run: chmod +x gradlew
-      - name: Test Domain
-          run: ./gradlew test
-      - name: Build Application
-          run: ./gradlew build
+        run: chmod +x gradlew
+      - name: Test
+        run: ./gradlew test
+      - name: Build
+        run: ./gradlew build
