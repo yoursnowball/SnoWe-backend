@@ -1,0 +1,32 @@
+name: build
+on:
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    env:
+      APP_JWT_SECRET: ${{ secrets.APP_JWT_SECRET }}
+    steps:
+      - name: CheckOut Repository
+        uses: actions/checkout@v2
+
+      - name: SetUp JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Cache Gradle
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Grant execute permission for gradlew
+          run: chmod +x gradlew
+      - name: Test Domain
+          run: ./gradlew test
+      - name: Build Application
+          run: ./gradlew build
