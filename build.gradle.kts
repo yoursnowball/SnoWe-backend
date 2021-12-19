@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
+import org.springframework.boot.gradle.tasks.bundling.BootJar
 plugins {
     id("org.springframework.boot") version "2.4.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -50,8 +50,10 @@ tasks.withType<KotlinCompile> {
     }
 }
 
+val bootJar: BootJar by tasks
 val querydslDir = "$buildDir/generated/source/kapt/main"
 
+bootJar.archiveFileName.set("snowe-application.jar")
 querydsl {
     jpa = true
     querydslSourcesDir = querydslDir
