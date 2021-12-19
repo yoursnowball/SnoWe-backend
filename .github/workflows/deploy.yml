@@ -1,8 +1,7 @@
-name: build
+name: deploy
 on:
-  push:
-    branches: [ master ]
   pull_request:
+    types: [closed]
     branches: [ master ]
 jobs:
   build:
@@ -35,24 +34,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-      - name: Build Without Test
-        run: ./gradlew build -x test
-      - name: make Zip file
-        run: zip -r ./snowe.zip ./appspec.yml ./build/libs/snowe-application.jar .
-      - name:  Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-      - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$snowe.zip s3://snowe/snowe.zip
-      - name: Code Deploy
-      run: aws deploy create-deployment --application-name snowe --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=snowe,bundleType=zip,key=snowe.zip
-
-
-
-
-
-
-
+      - name: Test
+        run: ./gradlew test
+      - name: Build
+        run: ./gradlew build
