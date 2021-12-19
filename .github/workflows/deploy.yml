@@ -39,7 +39,7 @@ jobs:
       - name: Build
         run: ./gradlew build
       - name: make Zip file
-        run: zip -r ./snowe.zip ./appspec.yml ./build/libs/snowe-application.jar .
+        run: zip snowe.zip -r ./appspec.yml ./build/libs/snowe-application.jar .
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
