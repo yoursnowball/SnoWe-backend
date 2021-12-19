@@ -20,7 +20,6 @@ repositories {
 }
 
 dependencies {
-    implementation(files(".${File.separator}Snowe-bakend-private-file"))
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     implementation("com.querydsl:querydsl-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -60,7 +59,7 @@ querydsl {
     querydslSourcesDir = querydslDir
 }
 sourceSets.main.configure {
-    resources.srcDirs("src/main/resources","Snowe/backend/private-file")
+    resources.srcDirs("Snowe/backend/private-file")
 }
 sourceSets["main"].withConvention(KotlinSourceSet::class) {
     kotlin.srcDir(querydslDir)

@@ -28,4 +28,5 @@ fi
 
 nohup java -jar -DAPP_PORT=${TARGET_PORT} /home/ubuntu/snowe/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
 echo "New SpringBootApplication runs at ${TARGET_PORT}."
+echo "New SpringBootApplication's PID is $(lsof -ti tcp:${TARGET_PORT})"
 exit 0
