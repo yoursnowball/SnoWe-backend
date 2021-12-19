@@ -26,6 +26,6 @@ else
  sleep 5
 fi
 
-nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/snowe/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
+nohup java -jar -DAPP_PORT=${TARGET_PORT} /home/ubuntu/snowe/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
 echo "New SpringBootApplication runs at ${TARGET_PORT}."
 exit 0
