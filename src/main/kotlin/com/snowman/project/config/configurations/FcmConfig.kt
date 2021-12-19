@@ -16,7 +16,7 @@ class FcmConfig {
     @PostConstruct
     @Throws(IOException::class)
     fun initFcm() {
-        val serviceAccount = PathResource(".{File.separator}Snowe-bakend-private-file${File.separator}firebase${File.separator}snowe-firebase-adminsdk.json").inputStream
+        val serviceAccount = PathResource(".${File.separator}Snowe-bakend-private-file${File.separator}firebase${File.separator}snowe-firebase-adminsdk.json").inputStream
 
         val options: FirebaseOptions = FirebaseOptions.Builder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
