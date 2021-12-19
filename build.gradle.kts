@@ -59,7 +59,7 @@ querydsl {
     querydslSourcesDir = querydslDir
 }
 sourceSets.main.configure {
-    resources.srcDirs("Snowe/backend/private-file")
+    resources.srcDirs("Snowe-bakend-private-file")
 }
 sourceSets["main"].withConvention(KotlinSourceSet::class) {
     kotlin.srcDir(querydslDir)
