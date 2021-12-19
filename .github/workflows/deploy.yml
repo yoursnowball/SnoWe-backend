@@ -47,6 +47,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
       - name: Upload to S3
-        run: aws s3 cp --region ap-northeast-2 ./$snowe.zip s3://snowe/snowe.zip
+        run: aws s3 cp --region ap-northeast-2 ./snowe.zip s3://snowe/snowe.zip
       - name: Code Deploy
         run: aws deploy create-deployment --application-name snowe --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name develop --s3-location bucket=snowe,bundleType=zip,key=snowe.zip
