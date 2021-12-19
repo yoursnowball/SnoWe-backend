@@ -14,8 +14,8 @@ hooks:
     - location: scripts/start.sh
       runas: ubuntu
     - location: scripts/health_check.sh
-        runas: ubuntu
+      runas: ubuntu
     - location: scripts/switch.sh
-        runas: ubuntu
+      runas: ubuntu
     - location: scripts/delete.sh
-        runas: ubuntu
+      runas: ubuntu
