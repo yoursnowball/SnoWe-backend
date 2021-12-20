@@ -13,17 +13,15 @@ elif [ ${CURRENT_PORT} -eq 8082 ]; then
 else echo "There is no active SpringBootApplication now"
 fi
 
-echo "Deploy Script in ${TARGET_PORT}"
-
 TARGET_PID=$(lsof -ti tcp:${TARGET_PORT})
 
-if [ -z ${TARGET_PID} ];then
- echo "There is no active SpringBoot Application"
-else
- echo "kill $TARGET_PID"
- sudo kill -9 ${TARGET_PID}
+if [ ! -z ${TARGET_PID} ];then
+ echo "kill ${TARGET_PID}"
+ sudo kill ${TARGET_PID}
  sleep 5
 fi
 
-nohup java -jar -DAPP_PORT=${TARGET_PORT} /home/ubuntu/snowe/build/libs/* > /home/ubuntu/nohup.out&
+echo "Deploy Script in ${TARGET_PORT}"
+nohup java -jar -DAPP_PORT=${TARGET_PORT} /home/ubuntu/snowe/build/libs/* > /home/ubuntu/nohup.out 2>&1 &
+echo "Deploy Success in ${TARGET_PORT}"
 exit 0
