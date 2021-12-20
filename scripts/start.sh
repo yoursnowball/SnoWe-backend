@@ -26,5 +26,5 @@ else
  sleep 5
 fi
 
-nohup java -jar -DAPP_PORT=${TARGET_PORT} /home/ubuntu/snowe/build/libs/* > /home/ubuntu/nohup.out 
+nohup java -jar -DAPP_PORT=${TARGET_PORT} /home/ubuntu/snowe/build/libs/* > /home/ubuntu/nohup.out&
 exit 0
