@@ -1,6 +1,6 @@
 # switch.sh
 # !/bin/bash
-CURRENT_PORT=$(cat /home/ec2-user/service_url.inc | grep -Po '[0-9]+' | tail -1)
+CURRENT_PORT=$(cat /etc/nginx/service_url.inc | grep -Po '[0-9]+' | tail -1)
 TARGET_PORT=0
 echo "> Nginx currently proxies to ${CURRENT_PORT}."
 if [ ${CURRENT_PORT} -eq 8081 ]; then
