@@ -16,8 +16,9 @@ do
   echo "> #${RETRY_COUNT} trying..."
   echo "> health_check to http://127.0.0.1:${TARGET_PORT}/swagger-ui/index.html"
   RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:${TARGET_PORT}/"swagger-ui/index.html")
-  if [ ${RESPONSE_CODE} -eq 200 ]; then echo "> New WAS successfully running"
-  exit 0
+  if [ ${RESPONSE_CODE} -eq 200 ]; then
+    echo "> New WAS successfully running"
+    exit 0
   elif [ ${RETRY_COUNT} -eq 10 ]; then
     echo "> Health check failed."
     exit 1

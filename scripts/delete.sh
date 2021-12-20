@@ -13,8 +13,7 @@ fi
 
 TARGET_PID=$(lsof -ti tcp:${TARGET_PORT})
 
-if [ -z ${TARGET_PID} ]
-then
+if [ -z ${TARGET_PID} ]; then
  echo "There is no active SpringBoot Application"
 else
  echo "kill $TARGET_PID"
