@@ -18,6 +18,5 @@ if [ -z ${TARGET_PID} ]; then
 else
  echo "kill ${TARGET_PID}"
  sudo kill ${TARGET_PID}
- sleep 5
 fi
 

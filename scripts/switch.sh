@@ -12,7 +12,7 @@ else
   exit 1
 fi
 # Change nginx Proxy
-echo "set \$service_url http://127.0.0.1:${TARGET_PORT};" | tee /etc/nginx/service_url.inc
+echo "set \$service_url http://127.0.0.1:${TARGET_PORT};" | sudo tee /etc/nginx/service_url.inc
 
 # Reload nginx
 sudo service nginx reload

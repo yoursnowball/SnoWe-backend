@@ -18,7 +18,6 @@ TARGET_PID=$(lsof -ti tcp:${TARGET_PORT})
 if [ ! -z ${TARGET_PID} ];then
  echo "kill ${TARGET_PID}"
  sudo kill ${TARGET_PID}
- sleep 5
 fi
 
 echo "Deploy Script in ${TARGET_PORT}"
