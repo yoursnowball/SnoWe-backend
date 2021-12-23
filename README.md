@@ -6,6 +6,7 @@ MZ세대의 **장기 목표 달성**을 위한 **부캐 키우기 서비스**
 
 <br>
 
+## 서비스 소개
 ![1  표지](https://user-images.githubusercontent.com/72497599/144108061-0c63ab09-6506-46da-8439-0c33b4e48952.png)
 
 ![8  기능설명](https://user-images.githubusercontent.com/72497599/144116982-564a4a42-c7db-4aad-aad9-31ea8a813cf6.png)
@@ -17,15 +18,25 @@ MZ세대의 **장기 목표 달성**을 위한 **부캐 키우기 서비스**
 ![12 기능설명](https://user-images.githubusercontent.com/72497599/144116958-28c7443c-b6e2-42ce-ac4d-55ec585879ff.png)
 
 
-# TechStack
+## 시스템구조도
+![ll drawio](https://user-images.githubusercontent.com/57896918/147250253-4e1f6979-2150-453d-b623-eca460ee8cc7.png)
+
+
+
+
+
+## TechStack
 - Kotlin
 - SpringBoot
 - SpringData Jpa
 - QueryDSL
 - SpringSecurity
+- FirebaseCloudMessaging
 
-# Infra
+## Infra
 - Nginx
 - Mysql
 - Ubuntu:18.04
+- GithubAction
+- Aws CodeDeploy
 
