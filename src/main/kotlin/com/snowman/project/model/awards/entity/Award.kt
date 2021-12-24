@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "awards")
-data class Award(
+class Award(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,

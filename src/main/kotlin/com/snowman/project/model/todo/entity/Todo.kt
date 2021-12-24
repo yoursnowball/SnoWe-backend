@@ -9,7 +9,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "todos")
-data class Todo(
+class Todo(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,

@@ -7,7 +7,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "push_messages")
-data class PushMessage(
+class PushMessage(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,

@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "users",indexes = [Index(columnList = "fcm_token")])
-data class User(
+class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,

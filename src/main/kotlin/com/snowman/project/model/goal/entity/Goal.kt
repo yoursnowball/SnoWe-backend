@@ -10,7 +10,7 @@ import kotlin.math.pow
 
 @Entity
 @Table(name = "goals")
-data class Goal(
+class Goal(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
