@@ -12,12 +12,14 @@ import com.snowman.project.service.push.exceptions.AlarmNotFoundException
 import com.snowman.project.utils.push.PushUtil
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class PushService(
     val pushRepository: PushRepository
 ) {
 
+    @Transactional
     fun readAlarm(alarmId: Long): PushHistoryDto {
         val push = pushRepository.findByIdOrNull(alarmId) ?: throw AlarmNotFoundException()
         push.readAlarm()
@@ -56,6 +58,7 @@ class PushService(
         }
     }
 
+    @Transactional
     fun saveAlarmMessage(user: User, type: PushType, dto: SimpleGoalInfoDto) {
         var sendPushMessageDto: SendPushMessageDto? = null
         when (type) {

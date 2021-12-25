@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Aspect
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.ApplicationEventPublisherAware
 import org.springframework.stereotype.Component
+import kotlin.jvm.Throws
 
 
 @Aspect
@@ -19,8 +20,9 @@ class EventAspect : ApplicationEventPublisherAware {
         this.eventPublisher = applicationEventPublisher
     }
 
+    @Throws(Throwable::class)
     @Around("@annotation(org.springframework.transaction.annotation.Transactional)")
-    fun handleEvent(joinPoint: ProceedingJoinPoint): Any {
+    fun handleEvent(joinPoint: ProceedingJoinPoint): Any? {
         val appliedValue = appliedLocal.get()
         var nested  = false
 
@@ -39,6 +41,7 @@ class EventAspect : ApplicationEventPublisherAware {
             if (!nested) {
                 Events.reset()
                 appliedLocal.remove()
+                println("Reset")
             }
         }
     }

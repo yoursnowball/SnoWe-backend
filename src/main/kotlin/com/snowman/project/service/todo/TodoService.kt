@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-@Transactional
 class TodoService(
     private val todoRepository: TodoRepository,
     private val goalRepository: GoalRepository,
@@ -46,6 +45,7 @@ class TodoService(
         return todoRepository.findAllByGoalAndTodoDate(goal, date).map { TodoInfoDto(it) }
     }
 
+    @Transactional
     fun saveTodos(userId: Long, goalId: Long, todo: String, date: LocalDate): List<TodoInfoDto> {
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
@@ -60,6 +60,7 @@ class TodoService(
         return getTodosByGoalAndDate(user, goal, date)
     }
 
+    @Transactional
     fun updateToDo(
         userId: Long,
         goalId: Long,
@@ -82,6 +83,7 @@ class TodoService(
         return Pair(TodoInfoDto(todo),goal.level)
     }
 
+    @Transactional
     fun deleteTodo(userId: Long, goalId: Long, todoId: Long) {
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
