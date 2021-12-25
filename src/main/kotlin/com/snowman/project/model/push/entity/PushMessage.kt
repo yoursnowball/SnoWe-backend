@@ -1,6 +1,6 @@
 package com.snowman.project.model.push.entity
 
-import com.snowman.project.model.common.BaseTimeEntity
+import com.snowman.project.model.common.entity.BaseTimeEntity
 import com.snowman.project.model.push.enums.PushStatus
 import com.snowman.project.model.user.entity.User
 import javax.persistence.*

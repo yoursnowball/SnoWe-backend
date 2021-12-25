@@ -66,11 +66,11 @@ class TodoService(
         todoId: Long,
         name: String,
         succeed: Boolean
-    ): Pair<TodoInfoDto, LevelChange> {
+    ): Pair<TodoInfoDto, Int> {
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw TodoNotExistException()
-        var isLevelChange = LevelChange.KEEP
+
 
         if (goal.user != user || todo.goal != goal)
             throw NotYourContentException()
@@ -78,15 +78,8 @@ class TodoService(
         if (!todo.canUpdateOrDelete())
             throw CannotEditTodoException()
 
-        if (todo.update(name, succeed)) {
-            isLevelChange = goal.todoChange(succeed)
-            if (isLevelChange == LevelChange.LEVELUP)
-                pushService.saveAlarmMessage(user, PushType.LEVELUP, SimpleGoalInfoDto(goal))
-            if (todoRepository.countAllByGoalAndTodoDateAndSucceedIsFalse(goal, LocalDate.now()) == 0)
-                pushService.saveAlarmMessage(user, PushType.ALLCLEAR, SimpleGoalInfoDto(goal))
-        }
-
-        return Pair(TodoInfoDto(todo), isLevelChange)
+        todo.update(name, succeed)
+        return Pair(TodoInfoDto(todo),goal.level)
     }
 
     fun deleteTodo(userId: Long, goalId: Long, todoId: Long) {

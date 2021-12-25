@@ -1,6 +1,6 @@
 package com.snowman.project.model.user.entity
 
-import com.snowman.project.model.common.BaseTimeEntity
+import com.snowman.project.model.common.entity.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
