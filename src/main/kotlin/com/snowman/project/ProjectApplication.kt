@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @EnableScheduling
 @EnableJpaAuditing
 @SpringBootApplication
-@EnableAspectJAutoProxy
 @EnableSchedulerLock(defaultLockAtMostFor = "PT30S")
 class ProjectApplication
 

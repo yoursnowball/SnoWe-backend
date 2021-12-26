@@ -1,10 +1,11 @@
 package com.snowman.project.model.awards.entity
 
-import com.snowman.project.service.awards.event.AwardSaveEvent
-import com.snowman.project.model.common.entity.BaseTimeEntity
-import com.snowman.project.service.common.event.Events
+import com.snowman.project.model.common.entity.BaseEntity
 import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.user.entity.User
+import com.snowman.project.service.awards.event.AwardSaveEvent
+import com.snowman.project.model.common.entity.DomainEvent
+import org.springframework.data.domain.AfterDomainEventPublication
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -35,11 +36,10 @@ class Award(
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    val user: User
-
-) : BaseTimeEntity() {
+    val user: User,
+) : BaseEntity() {
     fun publishSaveEvent(): Award {
-        Events.raise(AwardSaveEvent(this))
+        events.add(AwardSaveEvent(this))
         return this
     }
 }

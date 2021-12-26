@@ -1,6 +1,11 @@
 package com.snowman.project.service.push
 
-import com.google.firebase.messaging.*
+import com.google.firebase.messaging.ApnsConfig
+import com.google.firebase.messaging.Aps
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingException
+import com.google.firebase.messaging.MulticastMessage
+import com.google.firebase.messaging.Notification
 import com.snowman.project.dao.push.PushRepository
 import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
 import com.snowman.project.model.push.dto.PushHistoryDto
@@ -30,19 +35,8 @@ class PushService(
     @Throws(FirebaseMessagingException::class)
     fun sendPushMessages(userList: List<User>, type: PushType) {
         val tokenList = userList.mapNotNull { it.fcmToken }
-        var sendPushMessageDto: SendPushMessageDto? = null
+        var sendPushMessageDto: SendPushMessageDto? = getAlarmMessageByType(type)
 
-        when (type) {
-            PushType.WRITE -> {
-                sendPushMessageDto = PushUtil.todoWriteAlarm()
-            }
-            PushType.CHEERUP -> {
-                sendPushMessageDto = PushUtil.getCheerUpAlarm()
-            }
-            PushType.DAILY -> {
-                sendPushMessageDto = PushUtil.dailyMorningAlarm()
-            }
-        }
         sendPushMessageDto?.let { message ->
             userList.filter { user -> user.fcmToken != null }
                 .forEach { filteredUser ->
@@ -77,6 +71,21 @@ class PushService(
                     body = it.body
                 )
             )
+        }
+    }
+
+    private fun getAlarmMessageByType(type: PushType): SendPushMessageDto? {
+        return when (type) {
+            PushType.WRITE -> {
+                PushUtil.todoWriteAlarm()
+            }
+            PushType.CHEERUP -> {
+                PushUtil.getCheerUpAlarm()
+            }
+            PushType.DAILY -> {
+                PushUtil.dailyMorningAlarm()
+            }
+            else -> null
         }
     }
 

@@ -14,7 +14,8 @@ class AwardEventListener {
     @EventListener
     fun handleAwardSaveEvent(event: AwardSaveEvent) {
         val award = event.source as Award
-        award.goal.moveToAward()
+        val goal = award.goal
+        goal.moveToAward()
 
     }
 }

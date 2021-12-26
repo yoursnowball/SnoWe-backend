@@ -1,4 +1,4 @@
-package com.snowman.project.service.common.event
+package com.snowman.project.model.common.entity
 
 import org.springframework.context.ApplicationEvent
 

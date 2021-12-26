@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-@Transactional
 class AuthService(
     val passwordEncoder: PasswordEncoder,
     val jwtTokenProvider: JwtTokenProvider,
     val userRepository: UserRepository
 ) {
 
+    @Transactional
     fun signUp(userName: String, password: String, nickName: String): String {
         if (userRepository.existsByUserName(userName))
             throw DuplicateUserNameException()

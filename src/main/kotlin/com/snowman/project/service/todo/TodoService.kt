@@ -5,10 +5,8 @@ import com.snowman.project.dao.goal.GoalRepository
 import com.snowman.project.dao.todo.TodoRepository
 import com.snowman.project.dao.todo.projections.TodoWIthGoalIdDto
 import com.snowman.project.dao.user.UserRepository
-import com.snowman.project.model.goal.dto.SimpleGoalInfoDto
 import com.snowman.project.model.goal.entity.Goal
 import com.snowman.project.model.goal.enums.LevelChange
-import com.snowman.project.model.push.enums.PushType
 import com.snowman.project.model.todo.dto.TodoInfoDto
 import com.snowman.project.model.todo.entity.Todo
 import com.snowman.project.model.user.entity.User
@@ -67,11 +65,11 @@ class TodoService(
         todoId: Long,
         name: String,
         succeed: Boolean
-    ): Pair<TodoInfoDto, Int> {
+    ): Pair<TodoInfoDto, LevelChange> {
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw TodoNotExistException()
-
+        val levelBeforeUpdate = goal.level
 
         if (goal.user != user || todo.goal != goal)
             throw NotYourContentException()
@@ -79,8 +77,11 @@ class TodoService(
         if (!todo.canUpdateOrDelete())
             throw CannotEditTodoException()
 
-        todo.update(name, succeed)
-        return Pair(TodoInfoDto(todo),goal.level)
+        /**
+         * DomainEvent발행을 위한 명시적인 Save
+         */
+        todoRepository.save(todo.update(name, succeed))
+        return Pair(TodoInfoDto(todo), checkLevelChange(levelBeforeUpdate, goal.level))
     }
 
     @Transactional
@@ -99,5 +100,19 @@ class TodoService(
             throw CannotDeleteSucceedTodoException()
 
         todoRepository.delete(todo)
+    }
+
+    private fun checkLevelChange(levelBeforeUpdate: Int, levelAfterUpdate: Int): LevelChange {
+        return when (levelBeforeUpdate - levelAfterUpdate) {
+            -1 -> {
+                LevelChange.LEVELUP
+            }
+            1 -> {
+                LevelChange.LEVELDOWN
+            }
+            else -> {
+                LevelChange.KEEP
+            }
+        }
     }
 }

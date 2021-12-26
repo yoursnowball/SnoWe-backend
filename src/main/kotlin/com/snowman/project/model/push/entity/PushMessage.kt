@@ -1,6 +1,6 @@
 package com.snowman.project.model.push.entity
 
-import com.snowman.project.model.common.entity.BaseTimeEntity
+import com.snowman.project.model.common.entity.BaseEntity
 import com.snowman.project.model.push.enums.PushStatus
 import com.snowman.project.model.user.entity.User
 import javax.persistence.*
@@ -24,7 +24,7 @@ class PushMessage(
     @Enumerated(EnumType.STRING)
     var status: PushStatus = PushStatus.UNREAD
 
-) : BaseTimeEntity() {
+) : BaseEntity() {
     fun readAlarm() {
         status = PushStatus.READ
     }

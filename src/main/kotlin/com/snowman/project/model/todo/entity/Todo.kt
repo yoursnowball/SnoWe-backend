@@ -1,11 +1,12 @@
 package com.snowman.project.model.todo.entity
 
-import com.snowman.project.model.common.entity.BaseTimeEntity
-import com.snowman.project.service.common.event.Events
+import com.snowman.project.model.common.entity.BaseEntity
+import com.snowman.project.model.common.entity.DomainEvent
 import com.snowman.project.model.goal.entity.Goal
+import com.snowman.project.model.user.entity.User
 import com.snowman.project.service.todo.event.TodoCheckedUpdateEvent
 import com.snowman.project.service.todo.event.TodoUnCheckedUpdateEvent
-import com.snowman.project.model.user.entity.User
+import org.springframework.data.domain.AfterDomainEventPublication
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.Column
@@ -43,11 +44,9 @@ class Todo(
 
     @Column(name = "todo_date")
     val todoDate: LocalDate
+) : BaseEntity() {
 
-
-) : BaseTimeEntity() {
-
-    fun update(name: String, succeed: Boolean){
+    fun update(name: String, succeed: Boolean): Todo {
         this.name = name
         /**
          * UnCheck -> Check
@@ -55,7 +54,7 @@ class Todo(
         if (!this.succeed && succeed) {
             this.succeed = succeed
             this.finishedAt = LocalDateTime.now()
-            Events.raise(TodoCheckedUpdateEvent(this))
+            events.add(TodoCheckedUpdateEvent(this))
         }
         /**
          * Check -> Uncheck
@@ -63,8 +62,9 @@ class Todo(
         else if (this.succeed && !succeed) {
             this.succeed = succeed
             this.finishedAt = null
-            Events.raise(TodoUnCheckedUpdateEvent(this))
+            events.add(TodoUnCheckedUpdateEvent(this))
         }
+        return this
     }
 
     fun canUpdateOrDelete(): Boolean {

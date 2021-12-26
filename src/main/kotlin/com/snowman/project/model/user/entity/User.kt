@@ -1,6 +1,6 @@
 package com.snowman.project.model.user.entity
 
-import com.snowman.project.model.common.entity.BaseTimeEntity
+import com.snowman.project.model.common.entity.BaseEntity
 import javax.persistence.*
 
 @Entity
@@ -21,7 +21,7 @@ class User(
 
     @Column(name = "fcm_token")
     var fcmToken: String? = null
-) : BaseTimeEntity() {
+) : BaseEntity() {
     fun registerFcmToken(token: String): String {
         fcmToken = token
         return fcmToken!!

@@ -11,8 +11,8 @@ data class GetTodoResponse(
     @ApiModelProperty("투두 정보")
     val todo: TodoInfoDto,
 
-    @ApiModelProperty("투두 변경 후 레벨")
-    val level: Int
+    @ApiModelProperty("레벨 변화 여부")
+    val level: LevelChange
 ) {
 
 }

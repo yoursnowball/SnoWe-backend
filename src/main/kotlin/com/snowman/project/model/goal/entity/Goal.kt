@@ -1,10 +1,11 @@
 package com.snowman.project.model.goal.entity
 
-import com.snowman.project.model.common.entity.BaseTimeEntity
+import com.snowman.project.model.common.entity.BaseEntity
+import com.snowman.project.model.common.entity.DomainEvent
 import com.snowman.project.model.goal.enums.CharacterType
 import com.snowman.project.model.user.entity.User
-import com.snowman.project.service.common.event.Events
 import com.snowman.project.service.goal.event.GoalLevelUpEvent
+import org.springframework.data.domain.AfterDomainEventPublication
 import java.time.LocalDateTime
 import javax.persistence.Column
 import javax.persistence.Entity
@@ -55,7 +56,7 @@ class Goal(
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     val user: User
-) : BaseTimeEntity() {
+) : BaseEntity() {
 
     fun canMoveToAwards(): Boolean {
         return level >= 5;
@@ -71,19 +72,21 @@ class Goal(
         this.finishedAt = LocalDateTime.now()
     }
 
-    fun todoChecked() {
+    fun todoChecked(): Goal {
         succeedTodoCount++
         levelTodoCount++
         if (isLevelUp()) levelUp()
 
+        return this
     }
 
-    fun todoUnchecked() {
+    fun todoUnchecked(): Goal {
         succeedTodoCount--
         if (isLevelDown())
             levelDown()
         else
             levelTodoCount--
+        return this
     }
 
     private fun isLevelDown(): Boolean {
@@ -97,7 +100,7 @@ class Goal(
     private fun levelUp() {
         levelTodoCount = 0
         level++
-        Events.raise(GoalLevelUpEvent(this))
+        events.add(GoalLevelUpEvent(this))
     }
 
     private fun levelDown() {
