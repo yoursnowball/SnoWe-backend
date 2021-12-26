@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class AwardService(
     private val awardRepository: AwardRepository,
     private val userRepository: UserRepository,
@@ -39,6 +38,7 @@ class AwardService(
         return awardRepository.getAwardsByRank(pageable)
     }
 
+    @Transactional
     fun saveAwards(userId: Long, goalId: Long): AwardInfoDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
@@ -50,16 +50,12 @@ class AwardService(
         if (!goal.canMoveToAwards())
             throw CannotMoveToAwardsException()
 
-        goal.moveToAward()
-        val award = awardRepository.save(
-            Award(
-                goal = goal,
-                totalTodoCount = todoRepository.countAllByGoal(goal),
-                user = user
-            )
+        val award = Award(
+            goal = goal,
+            totalTodoCount = todoRepository.countAllByGoal(goal),
+            user = user
         )
-
-        return AwardInfoDto(award)
+        return AwardInfoDto(awardRepository.save(award.publishSaveEvent()))
     }
 
 }

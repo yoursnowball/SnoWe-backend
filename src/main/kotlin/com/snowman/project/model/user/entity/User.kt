@@ -1,11 +1,11 @@
 package com.snowman.project.model.user.entity
 
-import com.snowman.project.model.common.BaseTimeEntity
+import com.snowman.project.model.common.entity.BaseEntity
 import javax.persistence.*
 
 @Entity
 @Table(name = "users",indexes = [Index(columnList = "fcm_token")])
-data class User(
+class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -21,7 +21,7 @@ data class User(
 
     @Column(name = "fcm_token")
     var fcmToken: String? = null
-) : BaseTimeEntity() {
+) : BaseEntity() {
     fun registerFcmToken(token: String): String {
         fcmToken = token
         return fcmToken!!

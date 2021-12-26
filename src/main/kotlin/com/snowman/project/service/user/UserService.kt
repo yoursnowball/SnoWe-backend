@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class UserService(
     val userRepository: UserRepository,
     val pushRepository: PushRepository,
@@ -37,6 +36,7 @@ class UserService(
         return pushRepository.findAllByUserOrderByCreatedAtDesc(user, PageUtils.of(page)).map { PushHistoryDto(it) }
     }
 
+    @Transactional
     fun deleteToken(userId: Long) {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         user.deleteFcmToken()

@@ -1,16 +1,27 @@
 package com.snowman.project.model.goal.entity
 
-import com.snowman.project.model.common.BaseTimeEntity
+import com.snowman.project.model.common.entity.BaseEntity
+import com.snowman.project.model.common.entity.DomainEvent
 import com.snowman.project.model.goal.enums.CharacterType
-import com.snowman.project.model.goal.enums.LevelChange
 import com.snowman.project.model.user.entity.User
+import com.snowman.project.service.goal.event.GoalLevelUpEvent
+import org.springframework.data.domain.AfterDomainEventPublication
 import java.time.LocalDateTime
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.ManyToOne
+import javax.persistence.Table
 import kotlin.math.pow
 
 @Entity
 @Table(name = "goals")
-data class Goal(
+class Goal(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -45,7 +56,7 @@ data class Goal(
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     val user: User
-) : BaseTimeEntity() {
+) : BaseEntity() {
 
     fun canMoveToAwards(): Boolean {
         return level >= 5;
@@ -61,27 +72,21 @@ data class Goal(
         this.finishedAt = LocalDateTime.now()
     }
 
-    fun todoChange(flag: Boolean): LevelChange {
-        if (flag) {
-            succeedTodoCount++
-            levelTodoCount++
+    fun todoChecked(): Goal {
+        succeedTodoCount++
+        levelTodoCount++
+        if (isLevelUp()) levelUp()
 
-            if (isLevelUp()) {
-                levelTodoCount = 0
-                level++
-                return LevelChange.LEVELUP
-            }
-        } else {
-            succeedTodoCount--
-            if (isLevelDown()) {
-                level--
-                levelTodoCount = (level.toDouble().pow(3).toInt()) - 1
-                return LevelChange.LEVELDOWN
-            } else {
-                levelTodoCount--
-            }
-        }
-        return LevelChange.KEEP
+        return this
+    }
+
+    fun todoUnchecked(): Goal {
+        succeedTodoCount--
+        if (isLevelDown())
+            levelDown()
+        else
+            levelTodoCount--
+        return this
     }
 
     private fun isLevelDown(): Boolean {
@@ -90,6 +95,17 @@ data class Goal(
 
     private fun isLevelUp(): Boolean {
         return levelTodoCount >= (level.toDouble().pow(3)).toInt()
+    }
+
+    private fun levelUp() {
+        levelTodoCount = 0
+        level++
+        events.add(GoalLevelUpEvent(this))
+    }
+
+    private fun levelDown() {
+        level--
+        levelTodoCount = (level.toDouble().pow(3).toInt()) - 1
     }
 
 }

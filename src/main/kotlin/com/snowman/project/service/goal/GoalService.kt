@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-@Transactional
 class GoalService(
     private val goalRepository: GoalRepository,
     private val userRepository: UserRepository,
@@ -107,6 +106,7 @@ class GoalService(
     /**
      * 목표 저장
      */
+    @Transactional
     fun saveGoal(userId: Long, name: String, objective: String, type: CharacterType): DetailGoalInfoDto {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val myOwnGoals = goalRepository.countAllByUserAndDeletedIsFalseAndAwardedIsFalse(user)
@@ -128,6 +128,7 @@ class GoalService(
     /**
      * 목표 삭제(flag)
      */
+    @Transactional
     fun deleteGoal(userId: Long, goalId: Long) {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
