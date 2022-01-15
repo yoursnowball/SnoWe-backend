@@ -12,7 +12,7 @@ data class GetTodoResponse(
     val todo: TodoInfoDto,
 
     @ApiModelProperty("레벨 변화 여부")
-    val level: LevelChange
+    val levelChange: LevelChange
 ) {
 
 }
