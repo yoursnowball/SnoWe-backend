@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
+@Transactional
 class UserService(
     val userRepository: UserRepository,
     val pushRepository: PushRepository,
@@ -27,7 +28,9 @@ class UserService(
 
     fun registerFcmToken(userId: Long, token: String): String {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        return user.registerFcmToken(token)
+        user.registerFcmToken(token)
+        userRepository.save(user)
+        return user.fcmToken!!
     }
 
     @Transactional(readOnly = true)
@@ -42,7 +45,7 @@ class UserService(
         user.deleteFcmToken()
     }
 
-    fun testPush(userId: Long,type:PushType) {
+    fun testPush(userId: Long, type: PushType) {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         pushService.sendPushMessages(listOf(user), type)
 
