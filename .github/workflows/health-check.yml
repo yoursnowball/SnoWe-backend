@@ -32,7 +32,7 @@ jobs:
           {
             attachments: [{
               color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-              text:  `${{ job.status }}' === 'success' ? 'Alive' : 'Dead' in ${process.env.AS_TOOK}`
+              text:  '${{ job.status }}' === 'success' ? 'Alive' : 'Dead' `in ${process.env.AS_TOOK}`
             }]
           }
       env:
