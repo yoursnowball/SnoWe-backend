@@ -12,11 +12,9 @@ on:
 
 jobs:
   build:
-    name: curl and webhook
     runs-on: ubuntu-latest
     steps:
-    - name: Check the deployed service URL
-      uses: jtalk/url-health-check-action@v2
+    - uses: Jtalk/url-health-check-action@v2
       with:
       # Check the following URLs one by one sequentially
         url: ${{ secrets.HEALTH_CHECK_URL }}
@@ -26,8 +24,7 @@ jobs:
         retry-delay: 5s # Optional, only applicable to max-attempts > 1
       # Retry all errors, including 404. This option might trigger curl upgrade.
         retry-all: false # Optional, defaults to "false"
-    - name: Send Slack WebHook 
-      uses: 8398a7/action-slack@v3
+    - uses: 8398a7/action-slack@v3
       with:
         status: custom
         fields: workflow,job,commit,repo,ref,author,took
