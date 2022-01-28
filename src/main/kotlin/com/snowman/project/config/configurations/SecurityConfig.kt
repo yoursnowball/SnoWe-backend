@@ -34,6 +34,7 @@ class SecurityConfig(
             .and()
             .authorizeRequests()
             .antMatchers("/auth/**").permitAll()
+            .antMatchers("/ping").permitAll()
             .anyRequest().authenticated()
             .and()
             .addFilterBefore(
