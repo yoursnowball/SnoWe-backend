@@ -1,0 +1,43 @@
+# This is a basic workflow to help you get started with Actions
+
+name: HealthCheck
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  schedule: 
+    - cron: '*/1 * * * *'
+
+
+jobs:
+  build:
+    name: curl and webhook
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check the deployed service URL
+      uses: jtalk/url-health-check-action@v2
+      with:
+      # Check the following URLs one by one sequentially
+        url: ${{ secrets.HEALTH_CHECK_URL }}
+      # Fail this action after this many failed attempts
+        max-attempts: 3 # Optional, defaults to 1
+      # Delay between retries
+        retry-delay: 5s # Optional, only applicable to max-attempts > 1
+      # Retry all errors, including 404. This option might trigger curl upgrade.
+        retry-all: false # Optional, defaults to "false"
+    - name: Send Slack WebHook 
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit,repo,ref,author,took
+        custom_payload: |
+          {
+            attachments: [{
+              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              text: `${process.env.AS_WORKFLOW}\n${process.env.AS_JOB} ${process.env.AS_REPO}@${process.env.AS_REF} by ${process.env.AS_AUTHOR} ${{ job.status }} in ${process.env.AS_TOOK}`,
+            }]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: always() # Pick up events even if the job fails or is canceled.
+    
