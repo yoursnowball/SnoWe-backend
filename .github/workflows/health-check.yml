@@ -5,8 +5,9 @@ name: HealthCheck
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
+  # Minimum Interval is 15 minutes
   schedule: 
-    - cron: '*/1 * * * *'
+    - cron: '*/15 * * * *'
 
 
 jobs:
