@@ -6,7 +6,7 @@ name: HealthCheck
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   # Minimum Interval is 15 minutes
-  schedule: 
+  schedule:
     - cron: '*/15 * * * *'
 
 
@@ -37,5 +37,5 @@ jobs:
           }
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      if: always() # Pick up events even if the job fails or is canceled.
+      if: failure() # Pick up events even if the job fails or is canceled.
     
