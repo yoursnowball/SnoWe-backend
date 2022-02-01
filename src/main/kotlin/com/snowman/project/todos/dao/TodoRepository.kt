@@ -8,11 +8,12 @@ import java.time.LocalDate
 
 @Repository
 interface TodoRepository : JpaRepository<Todo, Long>, TodoRepositoryCustom {
-    fun findAllByGoalAndTodoDate(
-        goal: Goal,
+    fun findAllByGoalIsInAndTodoDate(
+        goals: List<Goal>,
         todoDate: LocalDate
     ): List<Todo>
 
+    fun findAllByGoalAndTodoDate(goal: Goal, todoDate: LocalDate): List<Todo>
     fun countAllByGoal(goal: Goal): Int
     fun countAllByGoalAndTodoDateAndSucceedIsFalse(goal: Goal, date: LocalDate): Int
 }
