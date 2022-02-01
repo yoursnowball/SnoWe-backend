@@ -1,6 +1,5 @@
 package com.snowman.project.todos.service
 
-import com.snowman.project.common.exception.DateRangeException
 import com.snowman.project.common.exception.NotYourContentException
 import com.snowman.project.goals.dao.GoalRepository
 import com.snowman.project.goals.domain.entity.Goal
@@ -20,7 +19,6 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.time.LocalDate
 
 @Service

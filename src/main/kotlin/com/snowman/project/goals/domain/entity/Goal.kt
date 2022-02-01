@@ -80,13 +80,13 @@ class Goal(
 
     fun todoSuccess() {
         succeedTodoCount++
-        levelTodoCount++
 
         if (isLevelUp()) {
             levelTodoCount = 0
             level++
             registerEvent(GoalLevelUpEvent(user.id!!, id!!))
-        }
+        } else
+            levelTodoCount++
     }
 
     fun todoFail() {
@@ -100,12 +100,11 @@ class Goal(
     }
 
 
-    private fun isLevelDown(): Boolean {
-        return levelTodoCount == 0
+    fun isLevelDown(): Boolean {
+        return levelTodoCount == 0 && level > 1
     }
 
-    private fun isLevelUp(): Boolean {
-        return levelTodoCount >= (level.toDouble().pow(3)).toInt()
+    fun isLevelUp(): Boolean {
+        return levelTodoCount == (level.toDouble().pow(3)).toInt() - 1
     }
-
 }

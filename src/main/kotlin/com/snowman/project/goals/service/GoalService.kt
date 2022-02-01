@@ -38,9 +38,9 @@ class GoalService(
     fun getMyDailyGoalsHistory(userId: Long, date: LocalDate): List<DailyGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val activeGoalsInThatTime = goalRepository.getActiveGoalsByDateAndUser(user, date)
-
+        val activeTodos = todoRepository.findAllByGoalIsInAndTodoDate(activeGoalsInThatTime, date).groupBy { it.goal }
         return activeGoalsInThatTime.map { goal ->
-            val todos = todoRepository.findAllByGoalAndTodoDate(goal, date).map { TodoInfoDto(it) }
+            val todos = activeTodos[goal]?.map { TodoInfoDto(it) } ?: emptyList()
             DailyGoalInfoDto(
                 id = goal.id!!,
                 name = goal.name,
@@ -88,7 +88,7 @@ class GoalService(
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
 
-        if (goal.user != user)
+        if (user.id != goal.user.id)
             throw NotYourContentException()
         if (goal.deleted)
             throw DeletedContentException()
@@ -102,12 +102,15 @@ class GoalService(
     @Transactional(readOnly = true)
     fun getMyTodayActiveGoals(userId: Long): List<DetailGoalInfoDto> {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        return goalRepository.findAllByUserAndDeletedIsFalseAndAwardedIsFalse(user)
-            .map { goal ->
-                DetailGoalInfoDto(
-                    goal,
-                    todoRepository.findAllByGoalAndTodoDate(goal, LocalDate.now()).map { todo -> TodoInfoDto(todo) })
-            }
+        val goals = goalRepository.findAllByUserAndDeletedIsFalseAndAwardedIsFalse(user)
+        val todos = todoRepository.findAllByGoalIsInAndTodoDate(goals, LocalDate.now()).groupBy { it.goal }
+
+        return goals.map { goal ->
+            DetailGoalInfoDto(
+                goal,
+                todos[goal]?.map { TodoInfoDto(it) } ?: emptyList())
+        }
+
     }
 
     /**
