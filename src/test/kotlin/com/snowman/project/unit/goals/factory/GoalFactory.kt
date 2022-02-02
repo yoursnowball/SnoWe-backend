@@ -72,4 +72,17 @@ class GoalFactory {
             createdAt = LocalDateTime.now()
         )
     }
+
+    fun getAwardedGoal(): Goal {
+        return Goal(
+            id = 1L,
+            awarded = true,
+            succeedTodoCount = 150,
+            name = "MoveToAwardGoal",
+            objective = "testCanGoalMoveToAward",
+            characterType = CharacterType.BLUE,
+            user = userFactory.getContentsOwnedUser(),
+            createdAt = LocalDateTime.now()
+        )
+    }
 }
