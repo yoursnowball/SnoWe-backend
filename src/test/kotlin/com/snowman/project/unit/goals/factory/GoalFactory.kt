@@ -3,6 +3,7 @@ package com.snowman.project.unit.goals.factory
 import com.snowman.project.goals.domain.entity.Goal
 import com.snowman.project.goals.domain.enums.CharacterType
 import com.snowman.project.unit.users.factory.UserFactory
+import java.time.LocalDateTime
 
 class GoalFactory {
     private val userFactory = UserFactory()
@@ -13,7 +14,8 @@ class GoalFactory {
             name = "levelUpGoal",
             objective = "testIsGoalLevelUp",
             characterType = CharacterType.BLUE,
-            user = userFactory.getContentsOwnedUser()
+            user = userFactory.getContentsOwnedUser(),
+            createdAt = LocalDateTime.now()
         )
     }
 
@@ -26,7 +28,8 @@ class GoalFactory {
             name = "levelDownGoal",
             objective = "testIsGoalLevelDown",
             characterType = CharacterType.BLUE,
-            user = userFactory.getContentsOwnedUser()
+            user = userFactory.getContentsOwnedUser(),
+            createdAt = LocalDateTime.now()
         )
     }
 
@@ -39,7 +42,8 @@ class GoalFactory {
             name = "levelKeepGoal",
             objective = "testIsGoalLevelKeep",
             characterType = CharacterType.BLUE,
-            user = userFactory.getContentsOwnedUser()
+            user = userFactory.getContentsOwnedUser(),
+            createdAt = LocalDateTime.now()
         )
     }
 
@@ -52,7 +56,8 @@ class GoalFactory {
             name = "MoveToAwardGoal",
             objective = "testCanGoalMoveToAward",
             characterType = CharacterType.BLUE,
-            user = userFactory.getContentsOwnedUser()
+            user = userFactory.getContentsOwnedUser(),
+            createdAt = LocalDateTime.now()
         )
     }
 
@@ -63,7 +68,8 @@ class GoalFactory {
             name = "MoveToAwardGoal",
             objective = "testCanGoalMoveToAward",
             characterType = CharacterType.BLUE,
-            user = userFactory.getContentsOwnedUser()
+            user = userFactory.getContentsOwnedUser(),
+            createdAt = LocalDateTime.now()
         )
     }
 }

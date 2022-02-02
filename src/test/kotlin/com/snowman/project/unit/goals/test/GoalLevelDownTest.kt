@@ -1,6 +1,6 @@
 package com.snowman.project.unit.goals.test
 
-import com.snowman.project.unit.goals.GoalServiceBase
+import com.snowman.project.unit.goals.GoalTestBase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -9,7 +9,7 @@ import org.mockito.BDDMockito
 import java.util.Optional
 import kotlin.math.pow
 
-class GoalLevelDownTest : GoalServiceBase() {
+class GoalLevelDownTest : GoalTestBase() {
 
     @Test
     @DisplayName("Check LevelDown Possibility Test Success (Level이 1보다 낮아질 수 없음)")

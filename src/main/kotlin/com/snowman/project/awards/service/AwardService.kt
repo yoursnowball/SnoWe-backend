@@ -45,19 +45,20 @@ class AwardService(
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
 
-        if (goal.user != user)
+        if (goal.user.id != user.id)
             throw NotYourContentException()
         if (goal.deleted)
             throw DeletedContentException()
         if (!goal.canMoveToAwards())
             throw CannotMoveToAwardsException()
 
-        val award = Award(
-            goal = goal,
-            totalTodoCount = todoRepository.countAllByGoal(goal),
-            user = user
+        val award = awardRepository.save(
+            Award(
+                goal = goal,
+                totalTodoCount = todoRepository.countAllByGoal(goal),
+                user = user
+            ).publishCreateEvent()
         )
-        awardRepository.save(award.publishCreateEvent())
         award.pollAllEvent().forEach { publisher.publishEvent(it) }
         return AwardInfoDto(award)
     }

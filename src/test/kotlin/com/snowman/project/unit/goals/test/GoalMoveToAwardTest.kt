@@ -1,11 +1,11 @@
 package com.snowman.project.unit.goals.test
 
-import com.snowman.project.unit.goals.GoalServiceBase
+import com.snowman.project.unit.goals.GoalTestBase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
-class GoalMoveToAwardTest : GoalServiceBase() {
+class GoalMoveToAwardTest : GoalTestBase() {
 
     @Test
     @DisplayName("Check Can Move To Award")

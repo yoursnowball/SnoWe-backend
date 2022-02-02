@@ -1,6 +1,6 @@
 package com.snowman.project.unit.goals.test
 
-import com.snowman.project.unit.goals.GoalServiceBase
+import com.snowman.project.unit.goals.GoalTestBase
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -9,7 +9,7 @@ import org.mockito.BDDMockito.anyLong
 import org.mockito.BDDMockito.given
 import java.util.Optional
 
-class GoalLevelUpTest : GoalServiceBase() {
+class GoalLevelUpTest : GoalTestBase() {
 
     @Test
     @DisplayName("Check LevelUp Possibility Test Success")

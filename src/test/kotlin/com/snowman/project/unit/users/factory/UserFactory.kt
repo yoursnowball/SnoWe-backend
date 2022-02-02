@@ -1,6 +1,7 @@
 package com.snowman.project.unit.users.factory
 
 import com.snowman.project.users.model.entity.User
+import java.time.LocalDateTime
 
 class UserFactory {
 
@@ -9,7 +10,8 @@ class UserFactory {
             id = 1L,
             userName = "testAccount",
             password = "encryptedPassword",
-            nickName = "TestUnit"
+            nickName = "TestUnit",
+            createdAt = LocalDateTime.now()
         )
     }
 
@@ -18,7 +20,8 @@ class UserFactory {
             id = 2L,
             userName = "testAccount",
             password = "encryptedPassword",
-            nickName = "TestUnit"
+            nickName = "TestUnit",
+            createdAt = LocalDateTime.now()
         )
     }
 }
