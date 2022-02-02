@@ -16,7 +16,7 @@ import org.springframework.context.ApplicationEventPublisher
 
 
 @ExtendWith(MockitoExtension::class)
-open class GoalServiceBase(
+open class GoalTestBase(
 
 ) {
     @Mock

@@ -2,7 +2,7 @@ package com.snowman.project.unit.goals.test
 
 import com.snowman.project.common.exception.DeletedContentException
 import com.snowman.project.common.exception.NotYourContentException
-import com.snowman.project.unit.goals.GoalServiceBase
+import com.snowman.project.unit.goals.GoalTestBase
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -10,7 +10,7 @@ import org.mockito.BDDMockito.given
 import java.time.LocalDate
 import java.util.Optional
 
-class GetMyGoalsTest : GoalServiceBase() {
+class GetMyGoalsTest : GoalTestBase() {
 
     @Test
     @DisplayName("Get GoalsFailed Because Not My Content")

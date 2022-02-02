@@ -2,14 +2,14 @@ package com.snowman.project.unit.goals.test
 
 import com.snowman.project.goals.domain.enums.CharacterType
 import com.snowman.project.goals.service.exceptions.AlreadyMaximumGoalsException
-import com.snowman.project.unit.goals.GoalServiceBase
+import com.snowman.project.unit.goals.GoalTestBase
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.BDDMockito.given
 import java.util.Optional
 
-class SaveGoalTest : GoalServiceBase() {
+class SaveGoalTest : GoalTestBase() {
     @Test
     @DisplayName("Save Goal Failed Because Already Have 4 goals")
     fun saveGoalFailedBecauseAlreadyHave4Goals() {

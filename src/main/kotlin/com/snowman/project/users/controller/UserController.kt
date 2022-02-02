@@ -92,15 +92,4 @@ class UserController(
             pushService.readAlarm(alarmId)
         )
     }
-
-    @ApiOperation("Push Test Controller")
-    @GetMapping("/push-test")
-    fun pushTest(
-        @ApiIgnore
-        @Authenticated authInfo: AuthInfo,
-        @RequestParam(required = true)
-        type: PushType
-    ) {
-        userService.testPush(authInfo.id, type)
-    }
 }

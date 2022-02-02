@@ -32,7 +32,7 @@ class TodoService(
 
     @Transactional(readOnly = true)
     fun getTodosByGoalAndDate(user: User, goal: Goal, date: LocalDate): List<TodoInfoDto> {
-        if (goal.user != user)
+        if (goal.user.id != user.id)
             throw NotYourContentException()
         return todoRepository.findAllByGoalAndTodoDate(goal, date).map { TodoInfoDto(it) }
     }
@@ -41,7 +41,7 @@ class TodoService(
         val goal = goalRepository.findByIdOrNull(goalId) ?: throw GoalNotExistException()
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
 
-        if (goal.user != user)
+        if (goal.user.id != user.id)
             throw NotYourContentException()
         if (goal.deleted || goal.awarded)
             throw CannotAddTodoException()
@@ -63,7 +63,7 @@ class TodoService(
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw TodoNotExistException()
         val prevLevel = goal.level
 
-        if (goal.user != user || todo.goal != goal)
+        if (goal.user.id != user.id || todo.goal.id != goal.id)
             throw NotYourContentException()
         if (!todo.canUpdateOrDelete())
             throw CannotEditTodoException()
@@ -77,7 +77,7 @@ class TodoService(
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw TodoNotExistException()
 
-        if (goal.user != user || todo.goal != goal)
+        if (goal.user.id != user.id || todo.goal.id != goal.id)
             throw NotYourContentException()
 
         if (!todo.canUpdateOrDelete())
