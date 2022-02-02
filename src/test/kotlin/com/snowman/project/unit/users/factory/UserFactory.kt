@@ -24,4 +24,25 @@ class UserFactory {
             createdAt = LocalDateTime.now()
         )
     }
+
+    fun getFcmTokenIsNotNullUser(): User {
+        return User(
+            id = 1L,
+            fcmToken = "NotNull",
+            userName = "testAccount",
+            password = "encryptedPassword",
+            nickName = "TestUnit",
+            createdAt = LocalDateTime.now()
+        )
+    }
+
+    fun getFcmTokenIsNullUser(): User {
+        return User(
+            id = 1L,
+            userName = "testAccount",
+            password = "encryptedPassword",
+            nickName = "TestUnit",
+            createdAt = LocalDateTime.now()
+        )
+    }
 }

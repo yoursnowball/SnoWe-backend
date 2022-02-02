@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional
 class UserService(
     val userRepository: UserRepository,
     val pushRepository: PushRepository,
-    val pushService: PushService
 ) {
     @Transactional(readOnly = true)
     fun getUserInfo(id: Long): DetailUserInfoDto {
@@ -40,11 +39,5 @@ class UserService(
     fun deleteToken(userId: Long) {
         val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
         user.deleteFcmToken()
-    }
-
-    fun testPush(userId: Long,type: PushType) {
-        val user = userRepository.findByIdOrNull(userId) ?: throw UserNotExistException()
-        pushService.sendPushMessages(listOf(user), type)
-
     }
 }
