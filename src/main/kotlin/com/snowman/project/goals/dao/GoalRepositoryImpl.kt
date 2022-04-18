@@ -5,11 +5,9 @@ import com.querydsl.core.types.dsl.Expressions
 import com.querydsl.jpa.impl.JPAQueryFactory
 import com.snowman.project.goals.dao.projections.DailyGoalAndSucceedTodoNumDto
 import com.snowman.project.goals.dao.projections.QDailyGoalAndSucceedTodoNumDto
-
 import com.snowman.project.goals.domain.entity.Goal
 import com.snowman.project.goals.domain.entity.QGoal.goal
 import com.snowman.project.todos.domain.entity.QTodo.todo
-
 import com.snowman.project.users.model.entity.User
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
@@ -19,7 +17,7 @@ import java.time.LocalDate
 class GoalRepositoryImpl(
     val queryFactory: JPAQueryFactory
 ) : GoalRepositoryCustom {
-
+    
     override fun getDailyGoalsWithSucceedTodoCountByDateBetween(
         user: User,
         startDate: LocalDate,
@@ -44,7 +42,7 @@ class GoalRepositoryImpl(
             )
             .from(goal)
             .join(todo).on(todo.goal.eq(goal), todo.succeed.isTrue)
-            .where(createdAtDateBetween(startDate, endDate),goal.user.eq(user))
+            .where(createdAtDateBetween(startDate, endDate), goal.user.eq(user))
             .groupBy(
                 date,
                 goal.id

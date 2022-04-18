@@ -30,8 +30,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.jsonwebtoken:jjwt-api:0.10.5")
-    implementation("net.javacrumbs.shedlock:shedlock-spring:4.14.0")
-    implementation("net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.14.0")
     implementation("io.springfox:springfox-boot-starter:3.0.0")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     implementation("com.google.firebase:firebase-admin:6.8.1")
