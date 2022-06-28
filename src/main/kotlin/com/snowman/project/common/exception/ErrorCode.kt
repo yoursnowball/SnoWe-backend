@@ -29,8 +29,8 @@ enum class ErrorCode(
     NOT_YOUR_CONTENT("SYSTEM-001", "내 컨텐츠가 아닙니다.", HttpStatus.BAD_REQUEST),
     DELETED_CONTENT("SYSTEM-002", "삭제된 컨텐츠가 입니다.", HttpStatus.BAD_REQUEST),
     DATE_RANGE_EXCEPTION("SYSTEM-003", "유효하지 않은 날짜 범위입니다.", HttpStatus.BAD_REQUEST),
-    METHOD_ARGUMENT_NOTVALID("SYSTEM-004", "유효하지 않은 파라미터 값 요청입니다.", HttpStatus.BAD_REQUEST),
-    METHOD_ARGUMENT_TYPE_MISTMATCH("SYSTEM-005", "잘못된 파라미터 요청입니다.", HttpStatus.BAD_REQUEST),
+    METHOD_ARGUMENT_NOT_VALID("SYSTEM-004", "유효하지 않은 파라미터 값 요청입니다.", HttpStatus.BAD_REQUEST),
+    METHOD_ARGUMENT_TYPE_MISMATCH("SYSTEM-005", "잘못된 파라미터 요청입니다.", HttpStatus.BAD_REQUEST),
     CONSTRAINT_VIOLATION("SYSTEM-006", "잘못된 데이터 요청입니다.", HttpStatus.BAD_REQUEST),
     HTTP_MESSAGE_NOT_READABLE("SYSTEM-007", "데이터 요청을 읽을 수 없습니다.", HttpStatus.BAD_REQUEST),
 

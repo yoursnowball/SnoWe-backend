@@ -31,7 +31,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
     fun handleMethodArgumentTypeMismatch(ex: MethodArgumentTypeMismatchException): ResponseEntity<ErrorResponse> {
-        val errorCode = ErrorCode.METHOD_ARGUMENT_NOTVALID
+        val errorCode = ErrorCode.METHOD_ARGUMENT_NOT_VALID
         val httpStatus = errorCode.status
         val errorResponse = ErrorResponse(errorCode.code, errorCode.message, httpStatus.value())
         return ResponseEntity(errorResponse, httpStatus)
@@ -39,7 +39,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleRequestValid(ex: MethodArgumentNotValidException): ResponseEntity<ErrorResponse> {
-        val errorCode = ErrorCode.METHOD_ARGUMENT_TYPE_MISTMATCH
+        val errorCode = ErrorCode.METHOD_ARGUMENT_TYPE_MISMATCH
         val httpStatus = errorCode.status
         val errorResponse = ErrorResponse(errorCode.code, errorCode.message, httpStatus.value())
         return ResponseEntity(errorResponse, httpStatus)
